@@ -45,18 +45,23 @@ public class Customer extends AbstractEntity{
         this.firstName = firstName;
         this.lastName = lastName;
     }
-    public static Customer createOne(final CustomerCommand customerCommand, final Set<AddressCommand> addressCommands){
+    public static Customer createOne(final CustomerCommand customerCommand){
         final Customer customer = new Customer();
 
         customer.firstName = customerCommand.getFirstName();
         customer.lastName = customerCommand.getLastName();
         customer.email = customerCommand.getEmail();
-        customer.addresses = createAddress(addressCommands);
+        customer.addresses = createAddress(customerCommand.getAddressCommands());
         customer.addresses.forEach(address -> address.linkToCustomer(customer));
 
         return customer;
     }
 
+    public void update(final CustomerCommand customerCommand){
+        this.firstName = customerCommand.getFirstName();
+        this.lastName = customerCommand.getLastName();
+        this.email = customerCommand.getEmail();
+    }
     public Address addAddress(final AddressCommand addressCommand){
         final Address address = Address.create(addressCommand);
 
@@ -69,7 +74,7 @@ public class Customer extends AbstractEntity{
     }
 
     @Override
-    protected void delete() {
+    public void delete() {
         super.delete();
     }
 }

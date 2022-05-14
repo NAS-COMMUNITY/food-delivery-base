@@ -2,13 +2,14 @@ package com.example.fooddelivery.service.customer;
 
 import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.CustomerCommand;
+import com.example.fooddelivery.dto.CustomerDto;
 import com.example.fooddelivery.exception.BusinessException;
 import com.example.fooddelivery.exception.ExceptionFactory;
+import com.example.fooddelivery.mapper.CustomerMapper;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.Customer;
 import com.example.fooddelivery.repository.AddressRepository;
 import com.example.fooddelivery.repository.CustomerRepository;
-import com.example.fooddelivery.service.CustomerService;
 import com.example.fooddelivery.util.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +28,14 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final AddressRepository addressRepository;
 
+    private final CustomerMapper customerMapper;
 
     @Override
-    public Page<Customer> getAll(Pageable pageable){
-        return customerRepository.findAll(pageable);
+    public Page<CustomerDto> getAll(Pageable pageable){
+        Page<Address> addresses = addressRepository.findAll(pageable);
+        Page<Customer> customers = customerRepository.findAll(pageable);
+
+        return customers.map(customerMapper::toCustomerDto);
     }
 
     @Override
@@ -56,13 +61,34 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer createCustomer(CustomerCommand customerCommand) {
+    public Customer update(String customerId, CustomerCommand customerCommand) {
+        log.info("Begin updating customer with id {}", customerId);
+
+        final Customer customer = findById(customerId);
+        customer.update(customerCommand);
+
+        log.info("updating customer with id {} successfully", customer.getId());
+
+        return customer;
+    }
+
+    @Override
+    public Customer deleteCustomer(String customerId) {
+        log.info("Begin deleting customer with id {}", customerId);
+
+        final Customer customer = findById(customerId);
+
+        customer.delete();
+        log.info("customer with id {} dleted successfully", customer.getId());
+
+        return customerRepository.save(customer);
+    }
+
+    @Override
+    public Customer createCustomer(final CustomerCommand customerCommand) {
         log.info("Begin creating customer with payload {}", JSONUtil.toJSON(customerCommand));
 
-
-        final Set<AddressCommand> addresses = customerCommand.getAddressCommands();
-        log.info("address : {}", JSONUtil.toJSON(addresses));
-        final Customer customer = customerRepository.save(Customer.createOne(customerCommand, addresses));
+        final Customer customer = customerRepository.save(Customer.createOne(customerCommand));
         log.info("Creating Customer with payload {} successfully", JSONUtil.toJSON(customer));
 
         return customer;

@@ -17,7 +17,7 @@ public class Address extends AbstractEntity{
     private String city;
     private String country;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Customer customer;
 
     public Address(){

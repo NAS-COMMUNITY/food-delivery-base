@@ -1,18 +1,17 @@
-package com.example.fooddelivery.command;
+package com.example.fooddelivery.dto;
 
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
-public class CustomerCommand {
-
+public class CustomerDto {
+    private String id;
     private String firstName;
     private String lastName;
     private String email;
-    private Set<AddressCommand> addressCommands = new HashSet<>();
+    private Set<AddressDto> addressDtos;
 }
