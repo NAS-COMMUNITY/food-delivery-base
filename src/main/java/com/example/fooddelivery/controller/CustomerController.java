@@ -10,10 +10,14 @@ import com.example.fooddelivery.service.address.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 import static com.example.fooddelivery.cons.ResourcePath.CUSTOMER;
 import static com.example.fooddelivery.cons.ResourcePath.V1;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 @RestController
 @RequestMapping(V1 + CUSTOMER)
@@ -29,11 +33,16 @@ public class CustomerController {
         return customerService.getAll(pageable);
     }
 
-    @PostMapping("/{id}/address/{addressId}")
-    public Customer createOneWithAddress(@RequestBody CustomerCommand customerCommand, @PathVariable("addressId") String addressId){
-        final Customer customer = customerService.createCustomer(addressId, customerCommand);
-        //final Address address = addressService.createAddress(addressCommand);
+    @PostMapping()
+    public Customer createOneWithAddress(@RequestBody CustomerCommand customerCommand){
+        final Customer customer = customerService.createCustomer(customerCommand);
 
         return customer;
+    }
+    @PostMapping("/{customerId}/address")
+    public ResponseEntity<Address> createAddress(@PathVariable final String customerId, @RequestBody final AddressCommand addressCommand){
+        final Address address = customerService.addAddressToCustomer(customerId, addressCommand);
+        final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(address.getId()).toUri();
+        return ResponseEntity.created(uri).body(address);
     }
 }

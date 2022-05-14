@@ -4,6 +4,8 @@ package com.example.fooddelivery.model;
 import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.CustomerCommand;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -11,12 +13,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
+@Getter
+@Setter
 public class Customer extends AbstractEntity{
 
     private String firstName;
     private String lastName;
 
-    @Column(unique = true) //  a single email address cannot be used by multiple customers
+ //  a single email address cannot be used by multiple customers
     private String email;
 
     /**
@@ -29,7 +33,7 @@ public class Customer extends AbstractEntity{
      * @JoinColumn => add another column to the table backing the Address object.
      * This additional column will then be used to refer to the Customer to allow joining the tables
      */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
     @JsonIgnore
     private Set<Address> addresses;
     public Customer(){
@@ -37,9 +41,6 @@ public class Customer extends AbstractEntity{
     }
 
     public Customer(String firstName, String lastName) {
-
-        Assert.hasText(firstName);
-        Assert.hasText(lastName);
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -51,7 +52,7 @@ public class Customer extends AbstractEntity{
         customer.lastName = customerCommand.getLastName();
         customer.email = customerCommand.getEmail();
         customer.addresses = createAddress(addressCommands);
-        customer.addresses.forEach(address -> address.setCustomer(customer));
+        customer.addresses.forEach(address -> address.linkToCustomer(customer));
 
         return customer;
     }
@@ -59,41 +60,16 @@ public class Customer extends AbstractEntity{
     public Address addAddress(final AddressCommand addressCommand){
         final Address address = Address.create(addressCommand);
 
+        address.linkToCustomer(this);
+
         return address;
     }
     public static Set<Address> createAddress(final Set<AddressCommand> addressCommands){
         return addressCommands.stream().map(Address::create).collect(Collectors.toSet());
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Set<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(Set<Address> addresses) {
-        this.addresses = addresses;
+    @Override
+    protected void delete() {
+        super.delete();
     }
 }

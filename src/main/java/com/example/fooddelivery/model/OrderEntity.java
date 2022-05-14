@@ -22,6 +22,8 @@ public class OrderEntity extends AbstractEntity{
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    private String rejectReason;
+
     public OrderEntity(){
 
     }
@@ -36,5 +38,12 @@ public class OrderEntity extends AbstractEntity{
         this.customer = customer;
         this.shippingAddress = shippingAddress;
         this.billingAddress = billingAddress;
+    }
+    public void valide(){
+        this.status = Status.VALIDATED;
+    }
+    public void reject(String why){
+        this.status = Status.REJECTED;
+        this.rejectReason = why;
     }
 }
