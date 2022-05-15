@@ -2,8 +2,10 @@ package com.example.fooddelivery.service.order;
 
 
 import com.example.fooddelivery.command.OrderEntityCommand;
+import com.example.fooddelivery.dto.OrderDto;
 import com.example.fooddelivery.exception.BusinessException;
 import com.example.fooddelivery.exception.ExceptionFactory;
+import com.example.fooddelivery.mapper.OrderMapper;
 import com.example.fooddelivery.model.OrderEntity;
 import com.example.fooddelivery.repository.OrderRepository;
 import com.example.fooddelivery.util.JSONUtil;
@@ -13,12 +15,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class OrderServiceImpl implements OrderService{
 
     private final OrderRepository orderRepository;
+    private final OrderMapper orderMapper;
 
     /*@Override
     public OrderEntity createOrder(OrderEntityCommand orderEntityCommand) {
@@ -31,31 +37,40 @@ public class OrderServiceImpl implements OrderService{
     }*/
 
     @Override
-    public Page<OrderEntity> getAll(Pageable pageable) {
-        return orderRepository.findAll(pageable);
+    public Page<OrderDto> getAll(Pageable pageable) {
+
+        Page<OrderEntity> orderEntities = orderRepository.findAll(pageable);
+        return orderEntities.map(orderMapper::toOrderDto);
     }
 
     @Override
-    public OrderEntity findById(String orderId) {
-        log.info("Begin fetching Order with id {}", orderId);
+    public Set<OrderEntity> findById(Set<String> orderId) {
+        /*log.info("Begin fetching Order with id {}", orderId);
 
         final OrderEntity orderEntity = orderRepository.findById(orderId)
                 .orElseThrow(() -> new BusinessException(ExceptionFactory.ORDER_NOT_FOUND.get()));
 
-        log.info("Fetching order with id {} successfully", orderId);
-
-        return orderEntity;
+        log.info("Fetching order with id {} successfully", orderId);*/
+        return new HashSet<>(orderRepository.findAllById(orderId));
     }
 
     @Override
-    public void deleteOrder(String orderId) {
-        log.info("Begin deleting order with id {}", orderId);
+    public OrderEntity valide(String id) {
+        log.info("Begin fetching order with id {}", id);
+        final OrderEntity orderEntity = orderRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ExceptionFactory.ORDER_NOT_FOUND.get()));
+        orderEntity.valide();
 
-        final OrderEntity orderEntity = findById(orderId);
+        return orderRepository.save(orderEntity);
+    }
 
-        orderEntity.delete();
-        log.info("Deleting order with id {} successfully", orderId);
+    @Override
+    public OrderEntity reject(String orderId, String why) {
+        log.info("Begin fetching order with id {}", orderId);
+        final OrderEntity orderEntity = orderRepository.findById(orderId)
+                .orElseThrow(() -> new BusinessException(ExceptionFactory.ORDER_NOT_FOUND.get()));
 
-        orderRepository.save(orderEntity);
+        orderEntity.reject(why);
+        return orderRepository.save(orderEntity);
     }
 }

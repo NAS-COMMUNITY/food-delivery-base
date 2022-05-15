@@ -7,6 +7,7 @@ import com.example.fooddelivery.command.OrderEntityCommand;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.criterion.Order;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -37,7 +38,6 @@ public class Customer extends AbstractEntity{
     @JsonIgnore
     private Set<Address> addresses;
 
-
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
     @JsonIgnore
     private Set<OrderEntity> orderEntities;
@@ -58,6 +58,7 @@ public class Customer extends AbstractEntity{
         customer.email = customerCommand.getEmail();
         customer.addresses = createAddress(customerCommand.getAddressCommands());
         customer.addresses.forEach(address -> address.linkToCustomer(customer));
+        customer.orderEntities.forEach(order -> order.linkOrderToCustomer(customer));
 
         return customer;
     }

@@ -1,6 +1,7 @@
 package com.example.fooddelivery.command;
 
 
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +16,5 @@ public class CustomerCommand {
     private String lastName;
     private String email;
     private Set<AddressCommand> addressCommands = new HashSet<>();
-    private Set<OrderEntityCommand> orderEntityCommands = new HashSet<>();
+    private Set<String> orderEntities;
 }

@@ -39,7 +39,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Page<CustomerDto> getAll(Pageable pageable){
-        Page<Address> addresses = addressRepository.findAll(pageable);
         Page<Customer> customers = customerRepository.findAll(pageable);
 
         return customers.map(customerMapper::toCustomerDto);
@@ -56,15 +55,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         return address;
     }
-    @Override
-    public OrderEntity addOrderToCustomer(String customerId, OrderEntityCommand orderEntityCommand){
-        final Customer customer = findById(customerId);
-        log.info("Begin creating and adding address with payload {} to customer with id {}", JSONUtil.toJSON(orderEntityCommand), customerId);
-
-        final OrderEntity orderEntity = orderRepository.save(customer.addOrderEntity(orderEntityCommand));
-
-        return orderEntity;
-    }
+    //public OrderEntity addOrderToCustomer(String customerId, )
     @Override
     public Customer findById(String customerId) {
         log.info("Begin fetching customer with id {}", customerId);
@@ -99,12 +90,13 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customerRepository.save(customer);
     }
-
     @Override
     public Customer createCustomer(final CustomerCommand customerCommand) {
         log.info("Begin creating customer with payload {}", JSONUtil.toJSON(customerCommand));
 
+        final Set<OrderEntity> orderEntities = customerCommand.getOrderEntities() == null ? null : orderService.findById(customerCommand.getOrderEntities());
         final Customer customer = customerRepository.save(Customer.createOne(customerCommand));
+        customer.setOrderEntities(orderEntities);
         log.info("Creating Customer with payload {} successfully", JSONUtil.toJSON(customer));
 
         return customer;

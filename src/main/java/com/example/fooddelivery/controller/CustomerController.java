@@ -39,6 +39,12 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getAll(pageable));
     }
 
+    @GetMapping("/{customerId}")
+    public ResponseEntity<CustomerDto> getCustomerById(@PathVariable("customerId") String customerId){
+        final Customer customer = customerService.findById(customerId);
+
+        return ResponseEntity.ok(customerMapper.toCustomerDto(customer));
+    }
     @PostMapping()
     public ResponseEntity<CustomerDto> createOne(@RequestBody CustomerCommand customerCommand)throws NullPointerException{
         final Customer customer = customerService.createCustomer(customerCommand);
@@ -62,11 +68,5 @@ public class CustomerController {
         final  Customer customer = customerService.deleteCustomer(customerId);
 
         return ResponseEntity.noContent().build();
-    }
-    @PostMapping("/{customerId}/orders")
-    public ResponseEntity<OrderEntity> addOrderToCCustomer(@PathVariable("customerId") String customerId, @RequestBody OrderEntityCommand orderEntityCommand){
-        final OrderEntity orderEntity = customerService.addOrderToCustomer(customerId, orderEntityCommand);
-        final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(orderEntity.getId()).toUri();
-        return ResponseEntity.created(uri).body(orderEntity);
     }
 }
