@@ -34,4 +34,9 @@ public class AddressController {
 
         return ResponseEntity.ok(addressMapper.toAddressDto(address));
     }
+    @DeleteMapping("/{addressId}")
+    public ResponseEntity<Void> deleteAddressById(@PathVariable("addressId") String addressId){
+        addressService.deleteAddress(addressId);
+        return ResponseEntity.noContent().build();
+    }
 }

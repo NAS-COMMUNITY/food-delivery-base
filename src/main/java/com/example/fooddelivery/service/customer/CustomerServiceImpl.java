@@ -2,14 +2,18 @@ package com.example.fooddelivery.service.customer;
 
 import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.CustomerCommand;
+import com.example.fooddelivery.command.OrderEntityCommand;
 import com.example.fooddelivery.dto.CustomerDto;
 import com.example.fooddelivery.exception.BusinessException;
 import com.example.fooddelivery.exception.ExceptionFactory;
 import com.example.fooddelivery.mapper.CustomerMapper;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.Customer;
+import com.example.fooddelivery.model.OrderEntity;
 import com.example.fooddelivery.repository.AddressRepository;
 import com.example.fooddelivery.repository.CustomerRepository;
+import com.example.fooddelivery.repository.OrderRepository;
+import com.example.fooddelivery.service.order.OrderService;
 import com.example.fooddelivery.util.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +32,10 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final AddressRepository addressRepository;
 
+    private final OrderRepository orderRepository;
     private final CustomerMapper customerMapper;
+
+    private final OrderService orderService;
 
     @Override
     public Page<CustomerDto> getAll(Pageable pageable){
@@ -46,9 +53,18 @@ public class CustomerServiceImpl implements CustomerService {
         final Address address = addressRepository.save(customer.addAddress(addressCommand));
         log.info("New address has been added successfully to customer with id {}", customerId);
 
+
         return address;
     }
+    @Override
+    public OrderEntity addOrderToCustomer(String customerId, OrderEntityCommand orderEntityCommand){
+        final Customer customer = findById(customerId);
+        log.info("Begin creating and adding address with payload {} to customer with id {}", JSONUtil.toJSON(orderEntityCommand), customerId);
 
+        final OrderEntity orderEntity = orderRepository.save(customer.addOrderEntity(orderEntityCommand));
+
+        return orderEntity;
+    }
     @Override
     public Customer findById(String customerId) {
         log.info("Begin fetching customer with id {}", customerId);

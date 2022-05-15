@@ -14,4 +14,5 @@ public class CustomerDto {
     private String lastName;
     private String email;
     private Set<AddressDto> addressDtos;
+    private Set<OrderDto> orderDtos;
 }

@@ -3,12 +3,14 @@ package com.example.fooddelivery.controller;
 
 import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.CustomerCommand;
+import com.example.fooddelivery.command.OrderEntityCommand;
 import com.example.fooddelivery.dto.AddressDto;
 import com.example.fooddelivery.dto.CustomerDto;
 import com.example.fooddelivery.mapper.AddressMapper;
 import com.example.fooddelivery.mapper.CustomerMapper;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.Customer;
+import com.example.fooddelivery.model.OrderEntity;
 import com.example.fooddelivery.service.customer.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -60,5 +62,11 @@ public class CustomerController {
         final  Customer customer = customerService.deleteCustomer(customerId);
 
         return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/{customerId}/orders")
+    public ResponseEntity<OrderEntity> addOrderToCCustomer(@PathVariable("customerId") String customerId, @RequestBody OrderEntityCommand orderEntityCommand){
+        final OrderEntity orderEntity = customerService.addOrderToCustomer(customerId, orderEntityCommand);
+        final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(orderEntity.getId()).toUri();
+        return ResponseEntity.created(uri).body(orderEntity);
     }
 }

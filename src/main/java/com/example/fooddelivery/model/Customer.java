@@ -3,10 +3,10 @@ package com.example.fooddelivery.model;
 
 import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.CustomerCommand;
+import com.example.fooddelivery.command.OrderEntityCommand;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -36,6 +36,11 @@ public class Customer extends AbstractEntity{
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
     @JsonIgnore
     private Set<Address> addresses;
+
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
+    @JsonIgnore
+    private Set<OrderEntity> orderEntities;
     public Customer(){
 
     }

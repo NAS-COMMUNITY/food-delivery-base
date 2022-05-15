@@ -16,7 +16,10 @@ public enum ExceptionFactory {
     DOMAIN_NOT_FOUND(2, HttpStatus.NOT_FOUND, "domain.not.found"),
 
     // ADDRESS :
-    ADDRESS_NOT_FOUND(3, HttpStatus.NOT_FOUND, "address.not.found");
+    ADDRESS_NOT_FOUND(3, HttpStatus.NOT_FOUND, "address.not.found"),
+
+    // ADDRESS :
+    ORDER_NOT_FOUND(3, HttpStatus.NOT_FOUND, "order.not.found");
 
 
 
