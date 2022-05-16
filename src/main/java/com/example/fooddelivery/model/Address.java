@@ -20,6 +20,9 @@ public class Address extends AbstractEntity{
     @ManyToOne(optional = false)
     private Customer customer;
 
+    @ManyToOne(optional = false)
+    private OrderEntity orderEntity;
+
     public Address(){
 
     }
@@ -41,6 +44,9 @@ public class Address extends AbstractEntity{
         address.country = addressCommand.getCountry();
 
         return address;
+    }
+    public void linkToOrder(OrderEntity orderEntity){
+        this.orderEntity = orderEntity;
     }
 
     public void linkToCustomer(Customer customer){

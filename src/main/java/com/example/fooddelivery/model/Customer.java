@@ -62,7 +62,6 @@ public class Customer extends AbstractEntity{
 
         return customer;
     }
-
     public void update(final CustomerCommand customerCommand){
         this.firstName = customerCommand.getFirstName();
         this.lastName = customerCommand.getLastName();

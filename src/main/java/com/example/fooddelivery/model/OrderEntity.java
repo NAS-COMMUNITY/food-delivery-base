@@ -2,6 +2,7 @@ package com.example.fooddelivery.model;
 
 
 
+import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.CustomerCommand;
 import com.example.fooddelivery.command.OrderEntityCommand;
 import com.example.fooddelivery.enums.FoodType;
@@ -21,7 +22,7 @@ public class OrderEntity extends AbstractEntity{
     @ManyToOne(optional = false)
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Address billingAddress;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
@@ -44,13 +45,26 @@ public class OrderEntity extends AbstractEntity{
         this(customer, shippingAddress, null);
     }
 
+    public static OrderEntity createOne(final OrderEntityCommand orderEntityCommand){
+        final OrderEntity orderEntity = new OrderEntity();
+
+
+        //orderEntity.shippingAddress = orderEntityCommand.getShippingAddress();
+        //orderEntity.billingAddress = orderEntityCommand.getBillingAddress();
+        //orderEntity.type = FoodType.valueOf(orderEntityCommand.getType());
+        orderEntity.price = orderEntityCommand.getPrice();
+        //orderEntity.rejectReason = orderEntityCommand.getRejectReason();
+
+        return orderEntity;
+    }
+
     public static OrderEntity createOne(final OrderEntityCommand orderEntityCommand, final Customer customer){
         final OrderEntity orderEntity = new OrderEntity();
 
         orderEntity.customer = customer;
-        orderEntity.shippingAddress = orderEntityCommand.getShippingAddress();
-        orderEntity.billingAddress = orderEntityCommand.getBillingAddress();
-        orderEntity.type = orderEntityCommand.getType();
+        //orderEntity.shippingAddress = orderEntityCommand.getShippingAddress();
+        //orderEntity.billingAddress = orderEntityCommand.getBillingAddress();
+        orderEntity.type = FoodType.valueOf(orderEntityCommand.getType());
 
         return orderEntity;
     }
@@ -67,6 +81,11 @@ public class OrderEntity extends AbstractEntity{
     public void reject(String why){
         this.status = Status.REJECTED;
         this.rejectReason = why;
+    }
+    public Address linkToAddress(final AddressCommand billingAddress){
+        final Address address = Address.create(billingAddress);
+
+        return address;
     }
     public void linkOrderToCustomer(Customer customer){
         this.customer = customer;
