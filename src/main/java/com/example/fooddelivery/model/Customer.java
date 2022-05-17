@@ -38,9 +38,9 @@ public class Customer extends AbstractEntity{
     @JsonIgnore
     private Set<Address> addresses;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
+    /*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
     @JsonIgnore
-    private Set<OrderEntity> orderEntities;
+    private Set<OrderEntity> orderEntities;*/
     public Customer(){
 
     }
@@ -58,15 +58,12 @@ public class Customer extends AbstractEntity{
         customer.email = customerCommand.getEmail();
         customer.addresses = createAddress(customerCommand.getAddressCommands());
         customer.addresses.forEach(address -> address.linkToCustomer(customer));
-        customer.orderEntities.forEach(order -> order.linkOrderToCustomer(customer));
+        //customer.orderEntities = createOrder(customerCommand.getOrderEntities());
+        //customer.orderEntities.forEach(order -> order.linkOrderToCustomer(customer));
 
         return customer;
     }
-    public void update(final CustomerCommand customerCommand){
-        this.firstName = customerCommand.getFirstName();
-        this.lastName = customerCommand.getLastName();
-        this.email = customerCommand.getEmail();
-    }
+
     public Address addAddress(final AddressCommand addressCommand){
         final Address address = Address.create(addressCommand);
 
@@ -74,10 +71,24 @@ public class Customer extends AbstractEntity{
 
         return address;
     }
+    public OrderEntity addOrder(final OrderEntityCommand orderEntityCommand){
+        final OrderEntity order = OrderEntity.createOne(orderEntityCommand);
+
+        order.linkOrderToCustomer(this);
+
+        return order;
+    }
     public static Set<Address> createAddress(final Set<AddressCommand> addressCommands){
         return addressCommands.stream().map(Address::create).collect(Collectors.toSet());
     }
-
+    public static Set<OrderEntity> createOrder(final Set<OrderEntityCommand> orderEntityCommands){
+        return orderEntityCommands.stream().map(OrderEntity::createOne).collect(Collectors.toSet());
+    }
+    public void update(final CustomerCommand customerCommand){
+        this.firstName = customerCommand.getFirstName();
+        this.lastName = customerCommand.getLastName();
+        this.email = customerCommand.getEmail();
+    }
     @Override
     public void delete() {
         super.delete();

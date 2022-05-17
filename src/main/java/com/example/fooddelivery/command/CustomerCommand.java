@@ -11,10 +11,9 @@ import java.util.Set;
 @Getter
 @Setter
 public class CustomerCommand {
-
     private String firstName;
     private String lastName;
     private String email;
     private Set<AddressCommand> addressCommands = new HashSet<>();
-    private Set<String> orderEntities;
+    private Set<OrderEntityCommand> orderEntities = new HashSet<>();
 }

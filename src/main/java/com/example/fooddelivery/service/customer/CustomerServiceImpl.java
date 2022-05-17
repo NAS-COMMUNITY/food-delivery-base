@@ -49,13 +49,31 @@ public class CustomerServiceImpl implements CustomerService {
         final Customer customer = findById(customerId);
         log.info("Begin creating and adding address with payload {} to customer with id {}", JSONUtil.toJSON(addressCommand), customerId);
 
+
         final Address address = addressRepository.save(customer.addAddress(addressCommand));
         log.info("New address has been added successfully to customer with id {}", customerId);
 
 
         return address;
     }
-    //public OrderEntity addOrderToCustomer(String customerId, )
+    @Override
+    public Customer createCustomer(final CustomerCommand customerCommand) {
+        log.info("Begin creating customer with payload {}", JSONUtil.toJSON(customerCommand));
+
+        //OrderEntity orderEntity = new OrderEntity();
+        //final Set<OrderEntity> orderEntities = customerCommand.getOrderEntities() == null ? null : orderService.findById(customerCommand.getOrderEntities());
+        final Customer customer = customerRepository.save(Customer.createOne(customerCommand));
+
+        log.info("Creating Customer with payload {} successfully", JSONUtil.toJSON(customer));
+        return customer;
+    }
+    public OrderEntity addOrderToCustomer(String customerId, OrderEntityCommand orderEntityCommand){
+        final Customer customer = findById(customerId);
+
+        final OrderEntity order = orderRepository.save(customer.addOrder(orderEntityCommand));
+        order.linkOrderToCustomer(customer);
+        return order;
+    }
     @Override
     public Customer findById(String customerId) {
         log.info("Begin fetching customer with id {}", customerId);
@@ -90,15 +108,5 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customerRepository.save(customer);
     }
-    @Override
-    public Customer createCustomer(final CustomerCommand customerCommand) {
-        log.info("Begin creating customer with payload {}", JSONUtil.toJSON(customerCommand));
 
-        final Set<OrderEntity> orderEntities = customerCommand.getOrderEntities() == null ? null : orderService.findById(customerCommand.getOrderEntities());
-        final Customer customer = customerRepository.save(Customer.createOne(customerCommand));
-        customer.setOrderEntities(orderEntities);
-        log.info("Creating Customer with payload {} successfully", JSONUtil.toJSON(customer));
-
-        return customer;
-    }
 }

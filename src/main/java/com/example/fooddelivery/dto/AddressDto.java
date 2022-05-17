@@ -9,6 +9,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class AddressDto {
+    private String id;
     private String street;
     private String city;
     private String country;

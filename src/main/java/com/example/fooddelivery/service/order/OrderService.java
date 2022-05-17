@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Set;
 
 public interface OrderService {
-    public OrderEntity createOrder(OrderEntityCommand orderEntityCommand);
+    //public OrderEntity createOrder(OrderEntityCommand orderEntityCommand);
 
     Page<OrderDto> getAll(Pageable pageable);
 
@@ -21,4 +21,8 @@ public interface OrderService {
 
     OrderEntity reject(String orderId, String why);
     public Address addBillingAddressToOrder(String orderId, AddressCommand addressCommand);
+
+    public Address addShippingAddressToOrder(String orderId, AddressCommand addressCommand);
+
+    OrderEntity update(String orderId, OrderEntityCommand orderEntityCommand);
 }

@@ -31,22 +31,20 @@ public class OrderController {
     private final OrderService orderService;
     private final AddressMapper addressMapper;
 
-    private final OrderMapper orderMapper;
 
-
-    @PostMapping
-    public ResponseEntity<OrderDto> createOne(@RequestBody OrderEntityCommand orderEntityCommand){
-        final OrderEntity orderEntity = orderService.createOrder(orderEntityCommand);
-
-        return ResponseEntity.ok(orderMapper.toOrderDto(orderEntity));
-    }
     @GetMapping("/all")
     public ResponseEntity<Page<OrderDto>> getAll(Pageable pageable){
         return ResponseEntity.ok(orderService.getAll(pageable));
     }
-    @PostMapping("/{orderId}/address")
-    public ResponseEntity<AddressDto> createAddressToOrder(@PathVariable("orderId") final String orderId, @RequestBody final AddressCommand addressCommand){
+    @PostMapping("/{orderId}/billingAddress")
+    public ResponseEntity<AddressDto> addBillingAddressToOrder(@PathVariable("orderId") final String orderId, @RequestBody final AddressCommand addressCommand){
         final Address address = orderService.addBillingAddressToOrder(orderId, addressCommand);
+        final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(address.getId()).toUri();
+        return ResponseEntity.created(uri).body(addressMapper.toAddressDto(address));
+    }
+    @PostMapping("/{orderId}/shippingAddress")
+    public ResponseEntity<AddressDto> addShippingAddressToOrder(@PathVariable("orderId") String orderId, @RequestBody final AddressCommand addressCommand){
+        final Address address = orderService.addShippingAddressToOrder(orderId, addressCommand);
         final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(address.getId()).toUri();
         return ResponseEntity.created(uri).body(addressMapper.toAddressDto(address));
     }

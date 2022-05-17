@@ -7,6 +7,8 @@ import com.example.fooddelivery.command.CustomerCommand;
 import com.example.fooddelivery.command.OrderEntityCommand;
 import com.example.fooddelivery.enums.FoodType;
 import com.example.fooddelivery.enums.Status;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.criterion.Order;
 import org.springframework.util.Assert;
 
@@ -17,6 +19,8 @@ import java.math.BigDecimal;
 import static com.example.fooddelivery.enums.Status.PENDING;
 
 @Entity
+@Getter
+@Setter
 public class OrderEntity extends AbstractEntity{
 
     @ManyToOne(optional = false)
@@ -64,7 +68,7 @@ public class OrderEntity extends AbstractEntity{
         orderEntity.customer = customer;
         //orderEntity.shippingAddress = orderEntityCommand.getShippingAddress();
         //orderEntity.billingAddress = orderEntityCommand.getBillingAddress();
-        orderEntity.type = FoodType.valueOf(orderEntityCommand.getType());
+        orderEntity.type = orderEntityCommand.getType();
 
         return orderEntity;
     }
@@ -94,6 +98,13 @@ public class OrderEntity extends AbstractEntity{
         BigDecimal total;
 
         return null;
+    }
+    public void  update(final OrderEntityCommand orderEntityCommand){
+        this.billingAddress = orderEntityCommand.getBillingAddress();
+        this.shippingAddress = orderEntityCommand.getShippingAddress();
+        this.type = orderEntityCommand.getType();
+        this.status = orderEntityCommand.getStatus();
+
     }
 
     @Override

@@ -32,20 +32,14 @@ public class OrderServiceImpl implements OrderService{
 
     private final AddressRepository addressRepository;
 
-    @Override
-    public OrderEntity createOrder(OrderEntityCommand orderEntityCommand) {
-        log.info("Begin creating order with payload {}", JSONUtil.toJSON(orderEntityCommand));
-
-        final OrderEntity orderEntity = orderRepository.save(OrderEntity.createOne(orderEntityCommand));
-
-        log.info("Creating order with payload {} successfully", JSONUtil.toJSON(orderEntity));
-        return orderEntity;
-    }
 
     @Override
     public Page<OrderDto> getAll(Pageable pageable) {
 
         Page<OrderEntity> orderEntities = orderRepository.findAll(pageable);
+        for(OrderEntity order :orderEntities){
+            log.info(" order with payload {}", JSONUtil.toJSON(order));
+        }
         return orderEntities.map(orderMapper::toOrderDto);
     }
 
@@ -90,5 +84,28 @@ public class OrderServiceImpl implements OrderService{
         log.info("billing address has been added successfully to order with id {}", orderId);
 
         return address;
+    }
+    @Override
+    public Address addShippingAddressToOrder(String orderId, AddressCommand addressCommand){
+        final OrderEntity orderEntity = orderRepository.findById(orderId)
+                .orElseThrow(() -> new BusinessException(ExceptionFactory.ORDER_NOT_FOUND.get()));
+
+        log.info("Begin creating address and adding with payload {} to order with id {} ", JSONUtil.toJSON(addressCommand), orderId);
+
+        final Address address = addressRepository.save(orderEntity.linkToAddress(addressCommand));
+        log.info("shipping address has been added successfully to order with id {}", orderId);
+
+        return address;
+    }
+    @Override
+    public OrderEntity update(String orderId, OrderEntityCommand orderEntityCommand) {
+        log.info("Begin updating order with id {}", orderId);
+
+        final OrderEntity order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new BusinessException(ExceptionFactory.ORDER_NOT_FOUND.get()));
+        order.update(orderEntityCommand);
+        log.info("Updating order with id {} successfully", orderId);
+
+        return order;
     }
 }
