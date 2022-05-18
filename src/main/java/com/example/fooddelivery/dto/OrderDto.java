@@ -12,9 +12,9 @@ import java.math.BigDecimal;
 @Setter
 public class OrderDto {
     private String id;
-    private String customer;
-    private String billingAddress;
-    private String shippingAddress;
+    private Customer customer;
+    private Address billingAddress;
+    private Address shippingAddress;
     private String type;
     private String status;
     private BigDecimal price;

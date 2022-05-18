@@ -1,5 +1,6 @@
 package com.example.fooddelivery;
 
+import com.example.fooddelivery.enums.FoodType;
 import com.example.fooddelivery.enums.Status;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.Customer;
@@ -13,40 +14,37 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
 @SpringBootApplication
 @EnableJpaAuditing
-public class FoodDeliveryApplication {
-
-    /*@Autowired
-    private OrderRepository orderRepository;
+public class FoodDeliveryApplication implements CommandLineRunner{
 
     @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
-    private AddressRepository addressRepository;*/
+    private AddressRepository addressRepository;
     public static void main(String[] args) {
         SpringApplication.run(FoodDeliveryApplication.class, args);
     }
 
-    /*@Override
+    @Override
     public void run(String... args) throws Exception {
         Set<Address> addresses = new HashSet<>();
+
         Address address = new Address();
         address.setCity("Oujda");
         address.setCountry("Maroc");
         address.setStreet("22 rue limoun");
         addresses.add(address);
 
-
         Customer customer = new Customer();
         customer.setFirstName("anas");
         customer.setLastName("abbal");
         customer.setEmail("anas@gmail.com");
-
         customer.setAddresses(addresses);
         address.setCustomer(customer);
 
@@ -55,15 +53,14 @@ public class FoodDeliveryApplication {
         order.setBillingAddress(address);
         order.setShippingAddress(address);
         order.setStatus(Status.REJECTED);
+        order.setType(FoodType.TACOS);
+        order.setPrice(BigDecimal.valueOf(141.343));
+
         Set<OrderEntity> orderEntities = new HashSet<>();
         orderEntities.add(order);
-
         customer.setOrderEntities(orderEntities);
-
         customerRepository.save(customer);
-
         addressRepository.save(address);
-
         //orderRepository.save(order);
-    }*/
+    }
 }

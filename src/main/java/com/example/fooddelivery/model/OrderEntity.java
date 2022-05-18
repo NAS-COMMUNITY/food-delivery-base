@@ -40,7 +40,7 @@ public class OrderEntity extends AbstractEntity{
 
     private BigDecimal price;
 
-    private String rejectReason;
+    private String rejectReason = "";
 
     public OrderEntity(){
 
@@ -103,7 +103,6 @@ public class OrderEntity extends AbstractEntity{
         this.billingAddress = orderEntityCommand.getBillingAddress();
         this.shippingAddress = orderEntityCommand.getShippingAddress();
         this.type = orderEntityCommand.getType();
-        this.status = orderEntityCommand.getStatus();
 
     }
 

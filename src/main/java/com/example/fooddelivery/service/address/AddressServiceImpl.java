@@ -2,14 +2,15 @@ package com.example.fooddelivery.service.address;
 
 
 import com.example.fooddelivery.command.AddressCommand;
+import com.example.fooddelivery.dto.AddressDto;
 import com.example.fooddelivery.exception.BusinessException;
 import com.example.fooddelivery.exception.ExceptionFactory;
+import com.example.fooddelivery.mapper.AddressMapper;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.repository.AddressRepository;
 import com.example.fooddelivery.util.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,12 @@ import org.springframework.stereotype.Service;
 public class AddressServiceImpl implements AddressService{
 
     private final AddressRepository addressRepository;
+    private final AddressMapper addressMapper;
 
     @Override
-    public Page<Address> getAll(Pageable pageable) {
-        return addressRepository.findAll(pageable);
+    public Page<AddressDto> getAll(Pageable pageable) {
+        Page<Address> addresses = addressRepository.findAll(pageable);
+        return addresses.map(addressMapper::toAddressDto);
     }
 
     @Override

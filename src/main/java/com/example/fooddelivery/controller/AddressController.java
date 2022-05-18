@@ -24,8 +24,9 @@ public class AddressController {
     private final AddressMapper addressMapper;
 
     @GetMapping
-    public Page<Address> getAll(Pageable pageable){
-        return addressService.getAll(pageable);
+    public ResponseEntity<Page<AddressDto>> getAll(Pageable pageable){
+
+        return ResponseEntity.ok(addressService.getAll(pageable));
     }
 
     @PutMapping("/{addressId}")

@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.criterion.Order;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ public class Customer extends AbstractEntity{
     private String firstName;
     private String lastName;
 
- //  a single email address cannot be used by multiple customers
+    //  a single email address cannot be used by multiple customers
     private String email;
 
     /**
@@ -38,9 +39,9 @@ public class Customer extends AbstractEntity{
     @JsonIgnore
     private Set<Address> addresses;
 
-    /*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
     @JsonIgnore
-    private Set<OrderEntity> orderEntities;*/
+    private Set<OrderEntity> orderEntities;
     public Customer(){
 
     }
