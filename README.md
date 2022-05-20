@@ -6,7 +6,7 @@
         "id": "14e1da36-1513-4ac1-ae25-cc217da1621d",
         "firstName": "",
         "lastName": "",
-        "email": ",
+        "email": "",
     },
     "billingAddress": {
         "id": "7f0a292a-65f2-428d-a3db-b4c91d48b0ac",
