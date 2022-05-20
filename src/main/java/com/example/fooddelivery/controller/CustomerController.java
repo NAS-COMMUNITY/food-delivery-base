@@ -50,13 +50,15 @@ public class CustomerController {
         return ResponseEntity.created(uri).body(customerMapper.toCustomerDto(customer));
     }
     @PostMapping("/{customerId}/address")
-    public ResponseEntity<AddressDto> createAddress(@PathVariable final String customerId, @RequestBody final AddressCommand addressCommand){
+    public ResponseEntity<AddressDto> createAddress(@PathVariable final String customerId,
+                                                    @RequestBody final AddressCommand addressCommand){
         final Address address = customerService.addAddressToCustomer(customerId, addressCommand);
         final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(address.getId()).toUri();
         return ResponseEntity.created(uri).body(addressMapper.toAddressDto(address));
     }
     @PutMapping("/{customerId}")
-    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("customerId") String customerId, @RequestBody final CustomerCommand customerCommand){
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("customerId") String customerId,
+                                                      @RequestBody final CustomerCommand customerCommand){
         final Customer customer = customerService.update(customerId, customerCommand);
 
         return ResponseEntity.ok().body(customerMapper.toCustomerDto(customer));

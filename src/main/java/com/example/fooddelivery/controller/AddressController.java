@@ -30,7 +30,8 @@ public class AddressController {
     }
 
     @PutMapping("/{addressId}")
-    public ResponseEntity<AddressDto> updateAddress(@PathVariable("addressId") String addressId, @RequestBody AddressCommand addressCommand){
+    public ResponseEntity<AddressDto> updateAddress(@PathVariable("addressId") String addressId,
+                                                    @RequestBody AddressCommand addressCommand){
         final Address address = addressService.update(addressId, addressCommand);
 
         return ResponseEntity.ok(addressMapper.toAddressDto(address));

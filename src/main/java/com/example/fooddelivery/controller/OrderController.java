@@ -38,19 +38,22 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAll(pageable));
     }
     @PostMapping("/{orderId}/billingAddress")
-    public ResponseEntity<AddressDto> addBillingAddressToOrder(@PathVariable("orderId") final String orderId, @RequestBody final AddressCommand addressCommand){
+    public ResponseEntity<AddressDto> addBillingAddressToOrder(@PathVariable("orderId") final String orderId,
+                                                               @RequestBody final AddressCommand addressCommand){
         final Address address = orderService.addBillingAddressToOrder(orderId, addressCommand);
         final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(address.getId()).toUri();
         return ResponseEntity.created(uri).body(addressMapper.toAddressDto(address));
     }
     @PostMapping("/{orderId}/shippingAddress")
-    public ResponseEntity<AddressDto> addShippingAddressToOrder(@PathVariable("orderId") String orderId, @RequestBody final AddressCommand addressCommand){
+    public ResponseEntity<AddressDto> addShippingAddressToOrder(@PathVariable("orderId") String orderId,
+                                                                @RequestBody final AddressCommand addressCommand){
         final Address address = orderService.addShippingAddressToOrder(orderId, addressCommand);
         final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(address.getId()).toUri();
         return ResponseEntity.created(uri).body(addressMapper.toAddressDto(address));
     }
     @PutMapping("/{orderId}")
-    public ResponseEntity<OrderDto> updateOrder(@PathVariable("orderId") String orderId, @RequestBody final OrderEntityCommand orderEntityCommand){
+    public ResponseEntity<OrderDto> updateOrder(@PathVariable("orderId") String orderId,
+                                                @RequestBody final OrderEntityCommand orderEntityCommand){
         final OrderEntity order = orderService.update(orderId, orderEntityCommand);
 
         return ResponseEntity.ok(orderMapper.toOrderDto(order));
@@ -67,7 +70,8 @@ public class OrderController {
         return ResponseEntity.ok(orderMapper.toOrderDto(order));
     }
     @PutMapping("/reject/{orderId}")
-    public ResponseEntity<OrderDto> rejectOrder(@PathVariable("orderId") String orderId, @RequestBody final String why){
+    public ResponseEntity<OrderDto> rejectOrder(@PathVariable("orderId") String orderId,
+                                                @RequestBody final String why){
         final OrderEntity order = orderService.reject(orderId, why);
 
         return ResponseEntity.ok(orderMapper.toOrderDto(order));
