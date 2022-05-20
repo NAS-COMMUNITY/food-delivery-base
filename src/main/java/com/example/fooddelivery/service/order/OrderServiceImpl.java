@@ -110,7 +110,7 @@ public class OrderServiceImpl implements OrderService{
 
         return address;
     }
-    /*@Override
+    @Override
     public OrderEntity update(String orderId, OrderEntityCommand orderEntityCommand) {
         log.info("Begin updating order with id {}", orderId);
 
@@ -120,5 +120,5 @@ public class OrderServiceImpl implements OrderService{
         log.info("Updating order with id {} successfully", orderId);
 
         return order;
-    }*/
+    }
 }

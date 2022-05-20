@@ -3,18 +3,13 @@ package com.example.fooddelivery.controller;
 
 import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.CustomerCommand;
-import com.example.fooddelivery.command.OrderEntityCommand;
 import com.example.fooddelivery.dto.AddressDto;
 import com.example.fooddelivery.dto.CustomerDto;
-import com.example.fooddelivery.dto.OrderDto;
 import com.example.fooddelivery.mapper.AddressMapper;
 import com.example.fooddelivery.mapper.CustomerMapper;
-import com.example.fooddelivery.mapper.OrderMapper;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.Customer;
-import com.example.fooddelivery.model.OrderEntity;
 import com.example.fooddelivery.service.customer.CustomerService;
-import com.example.fooddelivery.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

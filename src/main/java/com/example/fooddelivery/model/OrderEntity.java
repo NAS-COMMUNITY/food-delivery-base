@@ -99,6 +99,9 @@ public class OrderEntity extends AbstractEntity{
 
         return null;
     }
+    public void update(final OrderEntityCommand orderEntityCommand){
+        this.type = orderEntityCommand.getType();
+    }
 
     @Override
     public void delete() {

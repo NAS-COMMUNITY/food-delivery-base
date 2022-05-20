@@ -24,6 +24,6 @@ public interface OrderService {
 
     public Address addShippingAddressToOrder(String orderId, AddressCommand addressCommand);
 
-    /*OrderEntity update(String orderId, OrderEntityCommand orderEntityCommand);*/
+    OrderEntity update(String orderId, OrderEntityCommand orderEntityCommand);
     public OrderEntity create(final OrderEntityCommand orderEntityCommand);
 }
