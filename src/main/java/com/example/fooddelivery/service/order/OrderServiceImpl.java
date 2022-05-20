@@ -12,6 +12,8 @@ import com.example.fooddelivery.model.Customer;
 import com.example.fooddelivery.model.OrderEntity;
 import com.example.fooddelivery.repository.AddressRepository;
 import com.example.fooddelivery.repository.OrderRepository;
+import com.example.fooddelivery.service.address.AddressService;
+import com.example.fooddelivery.service.customer.CustomerService;
 import com.example.fooddelivery.util.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +31,20 @@ public class OrderServiceImpl implements OrderService{
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
-
     private final AddressRepository addressRepository;
+    private final CustomerService customerService;
+    private final AddressService addressService;
 
+
+    @Override
+    public OrderEntity create(final OrderEntityCommand orderEntityCommand){
+        final Customer customer = orderEntityCommand.getCustomer() == null ? null : customerService.findById(orderEntityCommand.getCustomer());
+        final Address bilAddress = orderEntityCommand.getBillingAddress() == null ? null: addressService.findAddressById(orderEntityCommand.getBillingAddress());
+        final Address shipAddress = orderEntityCommand.getShippingAddress() == null ? null : addressService.findAddressById(orderEntityCommand.getShippingAddress());
+
+        final OrderEntity order = orderRepository.save(OrderEntity.createOne(orderEntityCommand, customer, bilAddress, shipAddress));
+        return order;
+    }
 
     @Override
     public Page<OrderDto> getAll(Pageable pageable) {
@@ -97,7 +110,7 @@ public class OrderServiceImpl implements OrderService{
 
         return address;
     }
-    @Override
+    /*@Override
     public OrderEntity update(String orderId, OrderEntityCommand orderEntityCommand) {
         log.info("Begin updating order with id {}", orderId);
 
@@ -107,5 +120,5 @@ public class OrderServiceImpl implements OrderService{
         log.info("Updating order with id {} successfully", orderId);
 
         return order;
-    }
+    }*/
 }

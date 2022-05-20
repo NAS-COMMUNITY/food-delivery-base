@@ -1,6 +1,8 @@
 package com.example.fooddelivery.dto;
 
 
+import com.example.fooddelivery.command.AddressCommand;
+import com.example.fooddelivery.command.OrderEntityCommand;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.OrderEntity;
 import lombok.Getter;
@@ -16,6 +18,4 @@ public class CustomerDto {
     private String firstName;
     private String lastName;
     private String email;
-    private Set<Address> addressDtos;
-    private Set<OrderEntity> orderDtos;
 }

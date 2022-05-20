@@ -22,4 +22,5 @@ public interface CustomerService {
     Customer update(String customerId, CustomerCommand customerCommand);
 
     Customer deleteCustomer(String customerId);
+    /*public OrderEntity addOrderToCustomer(String customerId, OrderEntityCommand orderEntityCommand);*/
 }

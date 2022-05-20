@@ -58,7 +58,7 @@ public class FoodDeliveryApplication implements CommandLineRunner{
 
         Set<OrderEntity> orderEntities = new HashSet<>();
         orderEntities.add(order);
-        customer.setOrderEntities(orderEntities);
+        //customer.setOrderEntities(orderEntities);
         customerRepository.save(customer);
         addressRepository.save(address);
         //orderRepository.save(order);

@@ -49,12 +49,12 @@ public class OrderEntity extends AbstractEntity{
         this(customer, shippingAddress, null);
     }
 
-    public static OrderEntity createOne(final OrderEntityCommand orderEntityCommand){
+    public static OrderEntity createOne(final OrderEntityCommand orderEntityCommand, final Customer customer, final Address billingAddress, final Address shippingAddress){
         final OrderEntity orderEntity = new OrderEntity();
 
-
-        //orderEntity.shippingAddress = orderEntityCommand.getShippingAddress();
-        //orderEntity.billingAddress = orderEntityCommand.getBillingAddress();
+        orderEntity.customer = customer;
+        orderEntity.billingAddress = billingAddress;
+        orderEntity.shippingAddress = shippingAddress;
         //orderEntity.type = FoodType.valueOf(orderEntityCommand.getType());
         orderEntity.price = orderEntityCommand.getPrice();
         //orderEntity.rejectReason = orderEntityCommand.getRejectReason();
@@ -98,12 +98,6 @@ public class OrderEntity extends AbstractEntity{
         BigDecimal total;
 
         return null;
-    }
-    public void  update(final OrderEntityCommand orderEntityCommand){
-        this.billingAddress = orderEntityCommand.getBillingAddress();
-        this.shippingAddress = orderEntityCommand.getShippingAddress();
-        this.type = orderEntityCommand.getType();
-
     }
 
     @Override

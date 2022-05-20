@@ -1,7 +1,8 @@
 package com.example.fooddelivery.dto;
 
+import com.example.fooddelivery.enums.FoodType;
+import com.example.fooddelivery.enums.Status;
 import com.example.fooddelivery.model.Address;
-import com.example.fooddelivery.model.Customer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,11 +13,11 @@ import java.math.BigDecimal;
 @Setter
 public class OrderDto {
     private String id;
-    private Customer customer;
-    private Address billingAddress;
-    private Address shippingAddress;
-    private String type;
-    private String status;
+    private CustomerDto customer;
+    private AddressDto billingAddress;
+    private AddressDto shippingAddress;
+    private FoodType type;
+    private Status status;
     private BigDecimal price;
     private String rejectReason;
 }

@@ -33,7 +33,6 @@ public class OrderController {
 
     private final OrderMapper orderMapper;
 
-
     @GetMapping("/all")
     public ResponseEntity<Page<OrderDto>> getAll(Pageable pageable){
         return ResponseEntity.ok(orderService.getAll(pageable));
@@ -50,10 +49,15 @@ public class OrderController {
         final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(address.getId()).toUri();
         return ResponseEntity.created(uri).body(addressMapper.toAddressDto(address));
     }
-    @PutMapping("/{orderId}")
+    /*@PutMapping("/{orderId}")
     public ResponseEntity<OrderDto> updateOrder(@PathVariable("orderId") String orderId, @RequestBody final OrderEntityCommand orderEntityCommand){
         final OrderEntity order = orderService.update(orderId, orderEntityCommand);
 
+        return ResponseEntity.ok(orderMapper.toOrderDto(order));
+    }*/
+    @PostMapping("/orders")
+    public ResponseEntity<OrderDto> createOrder(@RequestBody final OrderEntityCommand orderEntityCommand){
+        final OrderEntity order = orderService.create(orderEntityCommand);
         return ResponseEntity.ok(orderMapper.toOrderDto(order));
     }
     @PutMapping("/valide/{orderId}")

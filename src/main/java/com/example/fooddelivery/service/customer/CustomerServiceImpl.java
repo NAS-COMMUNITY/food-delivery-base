@@ -17,6 +17,7 @@ import com.example.fooddelivery.service.order.OrderService;
 import com.example.fooddelivery.util.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.criterion.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,11 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final AddressRepository addressRepository;
-
-    private final OrderRepository orderRepository;
     private final CustomerMapper customerMapper;
-
-    private final OrderService orderService;
 
     @Override
     public Page<CustomerDto> getAll(Pageable pageable){
@@ -48,15 +45,25 @@ public class CustomerServiceImpl implements CustomerService {
     public Address addAddressToCustomer(String customerId, AddressCommand addressCommand) {
         final Customer customer = findById(customerId);
         log.info("Begin creating and adding address with payload {} to customer with id {}", JSONUtil.toJSON(addressCommand), customerId);
-
-
-       // final Address address = addressRepository.save(customer.addAddress(addressCommand));
-
+        final Address address = addressRepository.save(customer.addAddress(addressCommand));
         log.info("New address has been added successfully to customer with id {}", customerId);
 
 
         return null;
     }
+    /*@Override
+    public OrderEntity addOrderToCustomer(String customerId, OrderEntityCommand orderEntityCommand){
+        final Customer customer = findById(customerId);
+        final Set<Address> address = customer.getAddresses();
+        for(Address address1 : address){
+            log.info("address : {}", address1);
+        }
+        log.info("Begin creating and adding order with payload {} to customer with id {}", JSONUtil.toJSON(orderEntityCommand), customerId);
+        final OrderEntity order = orderRepository.save(customer.addOrder(orderEntityCommand));
+        log.info("New order has been added successfully to customer with id {}", customerId);
+
+        return order;
+    }*/
     @Override
     public Customer createCustomer(final CustomerCommand customerCommand) {
         log.info("Begin creating customer with payload {}", JSONUtil.toJSON(customerCommand));
@@ -68,13 +75,6 @@ public class CustomerServiceImpl implements CustomerService {
 
         log.info("Creating Customer with payload {} successfully", JSONUtil.toJSON(customer));
         return customerRepository.save(customer);
-    }
-    public OrderEntity addOrderToCustomer(String customerId, OrderEntityCommand orderEntityCommand){
-        final Customer customer = findById(customerId);
-
-        final OrderEntity order = orderRepository.save(customer.addOrder(orderEntityCommand));
-        order.linkOrderToCustomer(customer);
-        return order;
     }
     @Override
     public Customer findById(String customerId) {
