@@ -38,3 +38,26 @@
     "rejectReason": ""
 }
 ```
+## Customer
+``` json
+{
+     "id": "97d2c92c-ffac-43fe-88da-c60278d8cff9",
+     "firstName": "anas",
+     "lastName": "abbal",
+     "email": "anas@gmail.com"
+}
+```
+## Address
+``` json
+{
+    "id": "72f74831-ad9a-445e-a873-498e0a739d57",
+    "street": "22 rue limoun",
+    "city": "Oujda",
+    "country": "Maroc",
+    "customer": {
+    "id": "97d2c92c-ffac-43fe-88da-c60278d8cff9",
+    "firstName": "anas",
+    "lastName": "abbal",
+    "email": "anas@gmail.com"
+}
+```
