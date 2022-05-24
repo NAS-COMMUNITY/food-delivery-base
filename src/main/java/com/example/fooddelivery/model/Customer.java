@@ -4,11 +4,13 @@ package com.example.fooddelivery.model;
 import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.CustomerCommand;
 import com.example.fooddelivery.command.OrderEntityCommand;
+import com.example.fooddelivery.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.criterion.Order;
 
+import javax.management.relation.RoleStatus;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +26,11 @@ public class Customer extends AbstractEntity{
 
     //  a single email address cannot be used by multiple customers
     private String email;
+
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     /**
      * whenever we initially persist, update, or delete a customer,
@@ -54,6 +61,8 @@ public class Customer extends AbstractEntity{
         customer.firstName = customerCommand.getFirstName();
         customer.lastName = customerCommand.getLastName();
         customer.email = customerCommand.getEmail();
+        customer.password = customerCommand.getPassword();
+        customer.role = customerCommand.getRole();
         customer.addresses = createAddress(customerCommand.getAddressCommands());
         customer.addresses.forEach(address -> address.linkToCustomer(customer));
 
@@ -74,6 +83,8 @@ public class Customer extends AbstractEntity{
         this.firstName = customerCommand.getFirstName();
         this.lastName = customerCommand.getLastName();
         this.email = customerCommand.getEmail();
+        this.password = customerCommand.getPassword();
+        this.role = customerCommand.getRole();
     }
     @Override
     public void delete() {

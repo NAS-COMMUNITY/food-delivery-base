@@ -4,6 +4,7 @@ package com.example.fooddelivery.security;
 import com.example.fooddelivery.exception.BusinessException;
 import com.example.fooddelivery.exception.ExceptionPayloadFactory;
 import com.example.fooddelivery.model.Customer;
+import com.example.fooddelivery.payload.UserDetailsImpl;
 import com.example.fooddelivery.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +31,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Customer customer = customerRepository.findByEmail(email).orElseThrow(() ->
                 new BusinessException(ExceptionPayloadFactory.CUSTOMER_NOT_FOUND.get()));
 
-        return null;
+        return UserDetailsImpl.build(customer);
     }
 }
