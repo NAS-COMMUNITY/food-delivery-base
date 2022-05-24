@@ -15,6 +15,9 @@ import org.springframework.util.Assert;
 import javax.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.example.fooddelivery.enums.Status.PENDING;
 
@@ -35,12 +38,12 @@ public class OrderEntity extends AbstractEntity{
     @Enumerated(EnumType.STRING)
     private Status status = PENDING;
 
-    @Enumerated(EnumType.STRING)
-    private FoodType type;
+    @OneToMany
+    private Set<Pane> pane = new HashSet<Pane>();
 
-    private BigDecimal price;
+    private BigDecimal price = BigDecimal.ZERO;
 
-    private String rejectReason = "";
+    private String rejectReason;
 
     public OrderEntity(){
 
@@ -49,28 +52,22 @@ public class OrderEntity extends AbstractEntity{
         this(customer, shippingAddress, null);
     }
 
-    public static OrderEntity createOne(final OrderEntityCommand orderEntityCommand, final Customer customer, final Address billingAddress, final Address shippingAddress){
+    public static OrderEntity createOne(final OrderEntityCommand orderEntityCommand,
+                                        final Customer customer,
+                                        final Address billingAddress,
+                                        final Address shippingAddress){
         final OrderEntity orderEntity = new OrderEntity();
 
         orderEntity.customer = customer;
         orderEntity.billingAddress = billingAddress;
         orderEntity.shippingAddress = shippingAddress;
-        //orderEntity.type = FoodType.valueOf(orderEntityCommand.getType());
         orderEntity.price = orderEntityCommand.getPrice();
-        //orderEntity.rejectReason = orderEntityCommand.getRejectReason();
 
         return orderEntity;
     }
 
-    public static OrderEntity createOne(final OrderEntityCommand orderEntityCommand, final Customer customer){
-        final OrderEntity orderEntity = new OrderEntity();
-
-        orderEntity.customer = customer;
-        //orderEntity.shippingAddress = orderEntityCommand.getShippingAddress();
-        //orderEntity.billingAddress = orderEntityCommand.getBillingAddress();
-        orderEntity.type = orderEntityCommand.getType();
-
-        return orderEntity;
+    public void addToPane(Pane pane){
+        this.pane.add(pane);
     }
 
     public OrderEntity(Customer customer, Address billingAddress, Address shippingAddress) {
@@ -91,20 +88,28 @@ public class OrderEntity extends AbstractEntity{
 
         return address;
     }
-    public void linkOrderToCustomer(Customer customer){
-        this.customer = customer;
+    public Set<Pane> getPane() {
+        return Collections.unmodifiableSet(pane);
     }
-    public BigDecimal totalPrice(){
-        BigDecimal total;
+    public BigDecimal getTotal() {
 
-        return null;
-    }
-    public void update(final OrderEntityCommand orderEntityCommand){
-        this.type = orderEntityCommand.getType();
-    }
+        BigDecimal total = BigDecimal.ZERO;
 
+        for (Pane item : pane) {
+            total = total.add(item.getTotal());
+        }
+
+        return total;
+    }
     @Override
     public void delete() {
         super.delete();
+    }
+
+    public Address getBillingAddress() {
+        return billingAddress != null ? billingAddress : shippingAddress;
+    }
+    public Address getShippingAddress() {
+        return shippingAddress;
     }
 }

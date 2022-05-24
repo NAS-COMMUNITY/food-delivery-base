@@ -25,10 +25,8 @@ public class AddressController {
 
     @GetMapping
     public ResponseEntity<Page<AddressDto>> getAll(Pageable pageable){
-
         return ResponseEntity.ok(addressService.getAll(pageable));
     }
-
     @PutMapping("/{addressId}")
     public ResponseEntity<AddressDto> updateAddress(@PathVariable("addressId") String addressId,
                                                     @RequestBody AddressCommand addressCommand){

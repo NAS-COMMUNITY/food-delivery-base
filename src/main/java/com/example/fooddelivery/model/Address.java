@@ -16,12 +16,9 @@ public class Address extends AbstractEntity{
     private String street;
     private String city;
     private String country;
-
     @ManyToOne(optional = false)
     private Customer customer;
 
-    /*@ManyToOne(optional = false)
-    private OrderEntity orderEntity;*/
 
     public Address(){
 
@@ -45,9 +42,6 @@ public class Address extends AbstractEntity{
 
         return address;
     }
-    /*public void linkToOrder(OrderEntity orderEntity){
-        this.orderEntity = orderEntity;
-    }*/
 
     public void linkToCustomer(Customer customer){
         this.customer = customer;

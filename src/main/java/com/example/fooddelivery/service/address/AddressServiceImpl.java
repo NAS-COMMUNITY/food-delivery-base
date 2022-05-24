@@ -15,6 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -61,5 +64,10 @@ public class AddressServiceImpl implements AddressService{
         log.info("Address with id {} fetched successfully", addressId);
 
         return address;
+    }
+
+    @Override
+    public Set<Address> findById(Set<String> id) {
+        return new HashSet<>(addressRepository.findAllById(id));
     }
 }

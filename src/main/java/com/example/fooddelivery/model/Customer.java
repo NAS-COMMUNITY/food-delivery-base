@@ -39,9 +39,6 @@ public class Customer extends AbstractEntity{
     @JsonIgnore
     private Set<Address> addresses;
 
-    /*@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
-    @JsonIgnore
-    private Set<OrderEntity> orderEntities;*/
     public Customer(){
 
     }
@@ -59,8 +56,6 @@ public class Customer extends AbstractEntity{
         customer.email = customerCommand.getEmail();
         customer.addresses = createAddress(customerCommand.getAddressCommands());
         customer.addresses.forEach(address -> address.linkToCustomer(customer));
-        //customer.orderEntities = createOrder(customerCommand.getOrderEntities());
-        //customer.orderEntities.forEach(order -> order.linkOrderToCustomer(customer));
 
         return customer;
     }
@@ -75,9 +70,6 @@ public class Customer extends AbstractEntity{
     public static Set<Address> createAddress(final Set<AddressCommand> addressCommands){
         return addressCommands.stream().map(Address::create).collect(Collectors.toSet());
     }
-    /*public void linkToOrder(OrderEntity order){
-        this.orderEntities.add(order);
-    }*/
     public void update(final CustomerCommand customerCommand){
         this.firstName = customerCommand.getFirstName();
         this.lastName = customerCommand.getLastName();

@@ -35,7 +35,15 @@ public class OrderServiceImpl implements OrderService{
     private final CustomerService customerService;
     private final AddressService addressService;
 
+    @Override
+    public Page<OrderDto> getAll(Pageable pageable) {
 
+        Page<OrderEntity> orderEntities = orderRepository.findAll(pageable);
+        for(OrderEntity order :orderEntities){
+            log.info(" order with payload {}", JSONUtil.toJSON(order));
+        }
+        return orderEntities.map(orderMapper::toOrderDto);
+    }
     @Override
     public OrderEntity create(final OrderEntityCommand orderEntityCommand){
         final Customer customer = orderEntityCommand.getCustomer() == null ? null : customerService.findById(orderEntityCommand.getCustomer());
@@ -47,23 +55,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public Page<OrderDto> getAll(Pageable pageable) {
-
-        Page<OrderEntity> orderEntities = orderRepository.findAll(pageable);
-        for(OrderEntity order :orderEntities){
-            log.info(" order with payload {}", JSONUtil.toJSON(order));
-        }
-        return orderEntities.map(orderMapper::toOrderDto);
-    }
-
-    @Override
     public Set<OrderEntity> findById(Set<String> orderId) {
-        /*log.info("Begin fetching Order with id {}", orderId);
-
-        final OrderEntity orderEntity = orderRepository.findById(orderId)
-                .orElseThrow(() -> new BusinessException(ExceptionFactory.ORDER_NOT_FOUND.get()));
-
-        log.info("Fetching order with id {} successfully", orderId);*/
         return new HashSet<>(orderRepository.findAllById(orderId));
     }
 
@@ -116,7 +108,7 @@ public class OrderServiceImpl implements OrderService{
 
         final OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new BusinessException(ExceptionFactory.ORDER_NOT_FOUND.get()));
-        order.update(orderEntityCommand);
+        //order.update(orderEntityCommand);
         log.info("Updating order with id {} successfully", orderId);
 
         return order;
