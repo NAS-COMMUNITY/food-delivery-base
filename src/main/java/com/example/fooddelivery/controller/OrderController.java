@@ -11,6 +11,7 @@ import com.example.fooddelivery.mapper.OrderMapper;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.OrderEntity;
 import com.example.fooddelivery.service.order.OrderService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -71,6 +72,12 @@ public class OrderController {
     public ResponseEntity<OrderDto> rejectOrder(@PathVariable("orderId") String orderId,
                                                 @RequestBody final String why){
         final OrderEntity order = orderService.reject(orderId, why);
+
+        return ResponseEntity.ok(orderMapper.toOrderDto(order));
+    }
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable("orderId") final String orderId){
+        final OrderEntity order = orderService.findOne(orderId);
 
         return ResponseEntity.ok(orderMapper.toOrderDto(order));
     }

@@ -55,7 +55,15 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public Set<OrderEntity> findById(Set<String> orderId) {
+    public OrderEntity findOne(String orderId) {
+        final OrderEntity order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new BusinessException(ExceptionFactory.ORDER_NOT_FOUND.get()));
+
+        return order;
+    }
+
+    @Override
+    public Set<OrderEntity> findAllById(Set<String> orderId) {
         return new HashSet<>(orderRepository.findAllById(orderId));
     }
 

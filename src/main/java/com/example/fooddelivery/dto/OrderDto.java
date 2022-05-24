@@ -15,7 +15,7 @@ public class OrderDto {
     private CustomerDto customer;
     private AddressDto billingAddress;
     private AddressDto shippingAddress;
-    private String type;
+    private FoodType type;
     private Status status;
     private BigDecimal price;
     private String rejectReason;

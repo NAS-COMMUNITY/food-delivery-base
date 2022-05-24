@@ -15,7 +15,7 @@ public interface OrderService {
 
     Page<OrderDto> getAll(Pageable pageable);
 
-    public Set<OrderEntity> findById(Set<String> id);
+    public Set<OrderEntity> findAllById(Set<String> id);
 
     public OrderEntity valide(String id);
 
@@ -26,4 +26,6 @@ public interface OrderService {
 
     OrderEntity update(String orderId, OrderEntityCommand orderEntityCommand);
     public OrderEntity create(final OrderEntityCommand orderEntityCommand);
+
+    OrderEntity findOne(String orderId);
 }

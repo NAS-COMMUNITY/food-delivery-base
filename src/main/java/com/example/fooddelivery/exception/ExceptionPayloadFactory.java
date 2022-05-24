@@ -15,7 +15,9 @@ public enum ExceptionPayloadFactory {
     EMAIL_ALREADY_EXIST(5, HttpStatus.FOUND, "email.already.found"),
 
     // CUSTOMER :
-    CUSTOMER_NOT_FOUND(5, HttpStatus.NOT_FOUND, "customer.not.found");
+    CUSTOMER_NOT_FOUND(5, HttpStatus.NOT_FOUND, "customer.not.found"),
+
+    ORDER_NOT_FOUND(5, HttpStatus.NOT_FOUND, "order.not.found");
 
 
 

@@ -16,7 +16,7 @@ public class JavaConfig extends WebSecurityConfigurerAdapter {
         // Disabling csrf
         http.cors().and().csrf().disable().
                 authorizeRequests()
-                .antMatchers("/v1/customers/**").permitAll();
+                .antMatchers("/v1/**").permitAll();
 
     }
 }

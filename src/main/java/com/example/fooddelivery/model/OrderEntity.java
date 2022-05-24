@@ -3,21 +3,15 @@ package com.example.fooddelivery.model;
 
 
 import com.example.fooddelivery.command.AddressCommand;
-import com.example.fooddelivery.command.CustomerCommand;
 import com.example.fooddelivery.command.OrderEntityCommand;
 import com.example.fooddelivery.enums.FoodType;
 import com.example.fooddelivery.enums.Status;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.criterion.Order;
-import org.springframework.util.Assert;
 
 import javax.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import static com.example.fooddelivery.enums.Status.PENDING;
 
@@ -38,9 +32,9 @@ public class OrderEntity extends AbstractEntity{
     @Enumerated(EnumType.STRING)
     private Status status = PENDING;
 
-    @OneToMany
-    private Set<Pane> pane = new HashSet<Pane>();
 
+    @Enumerated(EnumType.STRING)
+    private FoodType type;
     private BigDecimal price = BigDecimal.ZERO;
 
     private String rejectReason;
@@ -65,11 +59,6 @@ public class OrderEntity extends AbstractEntity{
 
         return orderEntity;
     }
-
-    public void addToPane(Pane pane){
-        this.pane.add(pane);
-    }
-
     public OrderEntity(Customer customer, Address billingAddress, Address shippingAddress) {
 
         this.customer = customer;
@@ -88,18 +77,8 @@ public class OrderEntity extends AbstractEntity{
 
         return address;
     }
-    public Set<Pane> getPane() {
-        return Collections.unmodifiableSet(pane);
-    }
-    public BigDecimal getTotal() {
-
-        BigDecimal total = BigDecimal.ZERO;
-
-        for (Pane item : pane) {
-            total = total.add(item.getTotal());
-        }
-
-        return total;
+    public void update(final  OrderEntityCommand orderEntityCommand){
+        this.type = orderEntityCommand.getType();
     }
     @Override
     public void delete() {
