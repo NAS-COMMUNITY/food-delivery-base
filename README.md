@@ -32,7 +32,7 @@
             "email": "",
         }
     },
-    "type": null,
+    "type": "PIZZA",
     "status": "PENDING",
     "price": 1231241.1231209701,
     "rejectReason": ""
@@ -55,9 +55,10 @@
     "city": "Oujda",
     "country": "Maroc",
     "customer": {
-    "id": "97d2c92c-ffac-43fe-88da-c60278d8cff9",
-    "firstName": "anas",
-    "lastName": "abbal",
-    "email": "anas@gmail.com"
+        "id": "97d2c92c-ffac-43fe-88da-c60278d8cff9",
+        "firstName": "anas",
+        "lastName": "abbal",
+        "email": "anas@gmail.com"
+    }
 }
 ```
