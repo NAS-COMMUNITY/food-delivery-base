@@ -13,5 +13,4 @@ import java.math.BigDecimal;
 @Setter
 public class ProductCommand {
     private String type;
-    private BigDecimal price;
 }

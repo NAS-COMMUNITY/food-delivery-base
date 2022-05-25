@@ -22,7 +22,7 @@ import java.util.Set;
 
 @SpringBootApplication
 @EnableJpaAuditing
-public class FoodDeliveryApplication implements CommandLineRunner{
+public class FoodDeliveryApplication{
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -41,7 +41,7 @@ public class FoodDeliveryApplication implements CommandLineRunner{
         SpringApplication.run(FoodDeliveryApplication.class, args);
     }
 
-    @Override
+   /* @Override
     public void run(String... args) throws Exception {
         Set<Address> addresses = new HashSet<>();
 
@@ -81,5 +81,5 @@ public class FoodDeliveryApplication implements CommandLineRunner{
 
         addressRepository.save(address);
         //orderRepository.save(order);
-    }
+    }*/
 }
