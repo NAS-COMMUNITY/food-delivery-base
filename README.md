@@ -1,6 +1,9 @@
 ## Step
 - user can signup and login and 
 
+
+![](./screen/product.png)
+
 ## Product 
 ``` json
 {
@@ -58,6 +61,7 @@
     "rejectReason": null
 }
 ```
+![](./screen/order.png)
 ## Order
 ``` json
 {
@@ -98,6 +102,7 @@
     "rejectReason": ""
 }
 ```
+![](./screen/customer.png)
 ## Customer
 ``` json
 {
@@ -111,6 +116,7 @@
     "updatedAt": "2022-05-25T14:44:38.259475"
 }
 ```
+![](./screen/address.png)
 ## Address
 ``` json
 {
