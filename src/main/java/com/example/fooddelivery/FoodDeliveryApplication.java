@@ -5,9 +5,11 @@ import com.example.fooddelivery.enums.Status;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.Customer;
 import com.example.fooddelivery.model.OrderEntity;
+import com.example.fooddelivery.model.Product;
 import com.example.fooddelivery.repository.AddressRepository;
 import com.example.fooddelivery.repository.CustomerRepository;
 import com.example.fooddelivery.repository.OrderRepository;
+import com.example.fooddelivery.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +29,14 @@ public class FoodDeliveryApplication implements CommandLineRunner{
 
     @Autowired
     private AddressRepository addressRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+
+    @Autowired
+    private ProductRepository productRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(FoodDeliveryApplication.class, args);
     }
@@ -41,6 +51,9 @@ public class FoodDeliveryApplication implements CommandLineRunner{
         address.setStreet("22 rue limoun");
         addresses.add(address);
 
+
+
+
         Customer customer = new Customer();
         customer.setFirstName("anas");
         customer.setLastName("abbal");
@@ -53,13 +66,19 @@ public class FoodDeliveryApplication implements CommandLineRunner{
         order.setBillingAddress(address);
         order.setShippingAddress(address);
         order.setStatus(Status.REJECTED);
-        order.setType(FoodType.TACOS);
-        order.setPrice(BigDecimal.valueOf(141.343));
+
+        Product product = new Product();
+        product.setType(FoodType.TACOS);
+
+        product.setOrder(order);
+        //order.setType(FoodType.TACOS);
+        //order.setPrice(BigDecimal.valueOf(141.343));
 
         Set<OrderEntity> orderEntities = new HashSet<>();
         orderEntities.add(order);
         //customer.setOrderEntities(orderEntities);
         customerRepository.save(customer);
+
         addressRepository.save(address);
         //orderRepository.save(order);
     }

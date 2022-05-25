@@ -19,7 +19,10 @@ public enum ExceptionFactory {
     ADDRESS_NOT_FOUND(3, HttpStatus.NOT_FOUND, "address.not.found"),
 
     // ORDER :
-    ORDER_NOT_FOUND(3, HttpStatus.NOT_FOUND, "order.not.found");
+    ORDER_NOT_FOUND(3, HttpStatus.NOT_FOUND, "order.not.found"),
+
+    // ORDER :
+    PRODUCT_NOT_FOUND(3, HttpStatus.NOT_FOUND, "product.not.found");
 
 
 

@@ -17,8 +17,7 @@ public class OrderEntityCommand {
     private String customer;
     private String billingAddress;
     private String shippingAddress;
-    private FoodType type;
     private Status status;
-    private BigDecimal price;
     private String rejectReason;
+    private Set<ProductCommand> productCommands;
 }

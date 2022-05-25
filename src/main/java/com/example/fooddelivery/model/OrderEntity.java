@@ -4,16 +4,23 @@ package com.example.fooddelivery.model;
 
 import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.OrderEntityCommand;
+import com.example.fooddelivery.command.ProductCommand;
 import com.example.fooddelivery.enums.FoodType;
 import com.example.fooddelivery.enums.Status;
+import com.example.fooddelivery.service.product.ProductService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.example.fooddelivery.enums.Status.PENDING;
+import static com.example.fooddelivery.enums.Status.REJECTED;
 
 @Entity
 @Getter
@@ -31,19 +38,21 @@ public class OrderEntity extends AbstractEntity{
 
     @Enumerated(EnumType.STRING)
     private Status status = PENDING;
+    /**
+     * LAZY = fetch when needed
+     * EAGER = fetch immediately
+     * If your need more check ====> https://stackoverflow.com/questions/2990799/difference-between-fetchtype-lazy-and-eager-in-java-persistence-api
+     */
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order")
+    @JsonIgnore
+    private Set<Product> products;
 
-
-    @Enumerated(EnumType.STRING)
-    private FoodType type;
-    private BigDecimal price = BigDecimal.ZERO;
+    private Double price;
 
     private String rejectReason;
 
     public OrderEntity(){
 
-    }
-    public OrderEntity(Customer customer, Address shippingAddress){
-        this(customer, shippingAddress, null);
     }
 
     public static OrderEntity createOne(final OrderEntityCommand orderEntityCommand,
@@ -55,7 +64,8 @@ public class OrderEntity extends AbstractEntity{
         orderEntity.customer = customer;
         orderEntity.billingAddress = billingAddress;
         orderEntity.shippingAddress = shippingAddress;
-        orderEntity.price = orderEntityCommand.getPrice();
+        orderEntity.products = createProduct(orderEntityCommand.getProductCommands());
+        orderEntity.products.forEach(product -> product.linkToOrder(orderEntity));
 
         return orderEntity;
     }
@@ -64,6 +74,16 @@ public class OrderEntity extends AbstractEntity{
         this.customer = customer;
         this.shippingAddress = shippingAddress;
         this.billingAddress = billingAddress;
+    }
+    public static Set<Product> createProduct(Set<ProductCommand> productCommands){
+        return productCommands.stream().map(Product::createOne).collect(Collectors.toSet());
+    }
+    public Product addProduct(final ProductCommand productCommand){
+        final Product product = Product.createOne(productCommand);
+
+        product.linkToOrder(this);
+
+        return product;
     }
     public void valide(){
         this.status = Status.VALIDATED;
@@ -77,8 +97,11 @@ public class OrderEntity extends AbstractEntity{
 
         return address;
     }
+    public void linkToProduct(Product product){
+        this.products.add(product);
+    }
     public void update(final  OrderEntityCommand orderEntityCommand){
-        this.type = orderEntityCommand.getType();
+
     }
     @Override
     public void delete() {

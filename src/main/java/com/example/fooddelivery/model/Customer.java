@@ -68,7 +68,6 @@ public class Customer extends AbstractEntity{
 
         return customer;
     }
-
     public Address addAddress(final AddressCommand addressCommand){
         final Address address = Address.create(addressCommand);
 

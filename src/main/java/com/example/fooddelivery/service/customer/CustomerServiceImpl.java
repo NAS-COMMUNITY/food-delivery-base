@@ -9,6 +9,7 @@ import com.example.fooddelivery.exception.ExceptionFactory;
 import com.example.fooddelivery.mapper.CustomerMapper;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.Customer;
+import com.example.fooddelivery.payload.JwtSignUp;
 import com.example.fooddelivery.repository.AddressRepository;
 import com.example.fooddelivery.repository.CustomerRepository;
 import com.example.fooddelivery.service.address.AddressService;
@@ -91,6 +92,11 @@ public class CustomerServiceImpl implements CustomerService {
         log.info("customer with id {} dleted successfully", customer.getId());
 
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public void signup(JwtSignUp jwtSignUp) {
+
     }
 
 }
