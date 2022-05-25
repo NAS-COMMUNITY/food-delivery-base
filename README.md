@@ -53,7 +53,6 @@
         "createdAt": "2022-05-25T14:45:13.739097",
         "updatedAt": "2022-05-25T14:45:13.739097"
     },
-    "productDtoSet": null,
     "status": "PENDING",
     "price": 500.0,
     "rejectReason": null
