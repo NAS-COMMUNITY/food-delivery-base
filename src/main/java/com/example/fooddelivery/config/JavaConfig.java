@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class JavaConfig extends WebSecurityConfigurerAdapter {
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Disabling csrf
@@ -18,5 +17,11 @@ public class JavaConfig extends WebSecurityConfigurerAdapter {
                 authorizeRequests()
                 .antMatchers("/v1/**").permitAll();
 
+    }
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v2/api-docs",
+                "/swagger-resources/**",
+                "/swagger-ui.html");
     }
 }

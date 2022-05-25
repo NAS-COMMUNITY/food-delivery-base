@@ -24,19 +24,6 @@ import java.util.Set;
 @EnableJpaAuditing
 public class FoodDeliveryApplication{
 
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private AddressRepository addressRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
-
-
-    @Autowired
-    private ProductRepository productRepository;
-
     public static void main(String[] args) {
         SpringApplication.run(FoodDeliveryApplication.class, args);
     }

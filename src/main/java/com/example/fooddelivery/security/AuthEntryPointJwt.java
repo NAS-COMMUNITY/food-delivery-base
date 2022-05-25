@@ -14,8 +14,6 @@ import java.io.IOException;
 @Component
 @Slf4j
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
-
-
     /**
      * Catch authentication error
      */

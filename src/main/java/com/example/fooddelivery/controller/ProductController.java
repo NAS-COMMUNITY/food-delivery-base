@@ -2,6 +2,7 @@ package com.example.fooddelivery.controller;
 
 
 
+import com.example.fooddelivery.command.ProductCommand;
 import com.example.fooddelivery.dto.ProductDto;
 import com.example.fooddelivery.mapper.ProductMapper;
 import com.example.fooddelivery.model.Product;
@@ -30,6 +31,12 @@ public class ProductController {
     public ResponseEntity<ProductDto> getProductById(@PathVariable("productId") final String productId){
         final Product product = productService.findOneProduct(productId);
 
+        return ResponseEntity.ok(productMapper.toProductDto(product));
+    }
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable("productId")final String productId,
+                                                    final ProductCommand productCommand){
+        final Product product = productService.updateProduct(productId, productCommand);
         return ResponseEntity.ok(productMapper.toProductDto(product));
     }
     @DeleteMapping("/{productId}")

@@ -40,6 +40,18 @@ public class OrderController {
     public ResponseEntity<Page<OrderDto>> getAll(Pageable pageable){
         return ResponseEntity.ok(orderService.getAll(pageable));
     }
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable("orderId") final String orderId){
+        final OrderEntity order = orderService.findOne(orderId);
+
+        return ResponseEntity.ok(orderMapper.toOrderDto(order));
+    }
+    @GetMapping("/total/{orderId}")
+    public ResponseEntity<OrderDto> getTotal(@PathVariable("orderId") String orderId){
+        final OrderEntity order = orderService.getTotalOrder(orderId);
+
+        return ResponseEntity.ok(orderMapper.toOrderDto(order));
+    }
     @PostMapping("/{orderId}/billingAddress")
     public ResponseEntity<AddressDto> addBillingAddressToOrder(@PathVariable("orderId") final String orderId,
                                                                @RequestBody final AddressCommand addressCommand){
@@ -54,21 +66,23 @@ public class OrderController {
         final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(address.getId()).toUri();
         return ResponseEntity.created(uri).body(addressMapper.toAddressDto(address));
     }
-    @PutMapping("/{orderId}")
-    public ResponseEntity<OrderDto> updateOrder(@PathVariable("orderId") String orderId,
-                                                @RequestBody final OrderEntityCommand orderEntityCommand){
-        final OrderEntity order = orderService.update(orderId, orderEntityCommand);
 
-        return ResponseEntity.ok(orderMapper.toOrderDto(order));
-    }
     @PostMapping("/orders")
     public ResponseEntity<OrderDto> createOrder(@RequestBody final OrderEntityCommand orderEntityCommand){
         final OrderEntity order = orderService.create(orderEntityCommand);
         return ResponseEntity.ok(orderMapper.toOrderDto(order));
     }
-    @PutMapping("/valide/{orderId}")
-    public ResponseEntity<OrderDto> valideOrder(@PathVariable("orderId") String orderId){
-        final OrderEntity order = orderService.valide(orderId);
+    @PostMapping("/{orderId}/product")
+    public ResponseEntity<ProductDto> createProductToOrder(@PathVariable("orderId") final String orderId,
+                                                           @RequestBody ProductCommand productCommand){
+        final Product product = orderService.addProductToOrder(orderId, productCommand);
+        final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(product.getId()).toUri();
+        return ResponseEntity.ok(productMapper.toProductDto(product));
+    }
+    @PutMapping("/{orderId}")
+    public ResponseEntity<OrderDto> updateOrder(@PathVariable("orderId") String orderId,
+                                                @RequestBody final OrderEntityCommand orderEntityCommand){
+        final OrderEntity order = orderService.update(orderId, orderEntityCommand);
 
         return ResponseEntity.ok(orderMapper.toOrderDto(order));
     }
@@ -79,23 +93,11 @@ public class OrderController {
 
         return ResponseEntity.ok(orderMapper.toOrderDto(order));
     }
-    @GetMapping("/{orderId}")
-    public ResponseEntity<OrderDto> getOrderById(@PathVariable("orderId") final String orderId){
-        final OrderEntity order = orderService.findOne(orderId);
+    @PutMapping("/valide/{orderId}")
+    public ResponseEntity<OrderDto> valideOrder(@PathVariable("orderId") String orderId){
+        final OrderEntity order = orderService.valide(orderId);
 
         return ResponseEntity.ok(orderMapper.toOrderDto(order));
     }
-    @PostMapping("/{orderId}/product")
-    public ResponseEntity<ProductDto> createProductToOrder(@PathVariable("orderId") final String orderId,
-                                                           @RequestBody ProductCommand productCommand){
-        final Product product = orderService.addProductToOrder(orderId, productCommand);
-        final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(product.getId()).toUri();
-        return ResponseEntity.ok(productMapper.toProductDto(product));
-    }
-    @GetMapping("/total/{orderId}")
-    public ResponseEntity<OrderDto> getTotal(@PathVariable("orderId") String orderId){
-        final OrderEntity order = orderService.getTotalOrder(orderId);
 
-        return ResponseEntity.ok(orderMapper.toOrderDto(order));
-    }
 }
