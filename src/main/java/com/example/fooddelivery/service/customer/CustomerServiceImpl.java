@@ -20,8 +20,11 @@ import com.example.fooddelivery.service.address.AddressService;
 import com.example.fooddelivery.util.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mapstruct.control.MappingControl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -107,17 +110,27 @@ public class CustomerServiceImpl implements CustomerService {
         if(exist){
             throw new BusinessException(ExceptionFactory.EMAIL_ALREADY_EXIST.get());
         }
-        if(jwtSignUp.getPassword() == jwtSignUp.getMatchingPassword()){
-            throw new BusinessException(ExceptionFactory.ERROR_PASSWORD.get());
-        }
         final Customer customer = new Customer();
         customer.setLastName(jwtSignUp.getLastName());
         customer.setFirstName(jwtSignUp.getFirstName());
         customer.setEmail(jwtSignUp.getEmail());
         customer.setPassword(passwordEncoder.encode(jwtSignUp.getPassword()));
-        customer.setRole(Role.USER);
+        customer.setRole(Role.ADMIN);
         customer.setAddresses(null);
 
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public void changePasswordUser(Customer customer, String newPassword) {
+
+    }
+
+    @Override
+    public Customer findByEmail(String email) {
+        final  Customer customer = customerRepository.findByEmail(email).orElseThrow(() ->
+                new BusinessException(ExceptionFactory.EMAIL_ALREADY_EXIST.get()));
+
+        return customer;
     }
 }

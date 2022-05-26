@@ -26,4 +26,8 @@ public interface CustomerService {
     Customer deleteCustomer(String customerId);
 
     Customer signup(JwtSignUp jwtSignUp);
+
+    void changePasswordUser(Customer customer, String newPassword);
+
+    Customer findByEmail(String email);
 }

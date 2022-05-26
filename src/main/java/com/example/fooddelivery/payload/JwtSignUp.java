@@ -28,8 +28,4 @@ public class JwtSignUp {
     @NotEmpty
     @Size(max = 100, min = 1)
     private String password;
-
-    @NotNull
-    @NotEmpty
-    private String matchingPassword;
 }
