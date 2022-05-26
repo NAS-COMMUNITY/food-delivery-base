@@ -4,11 +4,15 @@ import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.CustomerCommand;
 import com.example.fooddelivery.command.OrderEntityCommand;
 import com.example.fooddelivery.dto.CustomerDto;
+import com.example.fooddelivery.enums.Role;
 import com.example.fooddelivery.exception.BusinessException;
 import com.example.fooddelivery.exception.ExceptionFactory;
+import com.example.fooddelivery.exception.ExceptionPayload;
+import com.example.fooddelivery.exception.ExceptionPayloadFactory;
 import com.example.fooddelivery.mapper.CustomerMapper;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.Customer;
+import com.example.fooddelivery.payload.JwtResponse;
 import com.example.fooddelivery.payload.JwtSignUp;
 import com.example.fooddelivery.repository.AddressRepository;
 import com.example.fooddelivery.repository.CustomerRepository;
@@ -18,8 +22,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Set;
 
 
@@ -31,7 +37,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final AddressRepository addressRepository;
 
-    private final AddressService addressService;
+    private final PasswordEncoder passwordEncoder;
     private final CustomerMapper customerMapper;
 
     @Override
@@ -95,8 +101,23 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void signup(JwtSignUp jwtSignUp) {
+    public Customer signup(JwtSignUp jwtSignUp) {
+        Boolean exist = customerRepository.selectExistsEmail(jwtSignUp.getEmail());
 
+        if(exist){
+            throw new BusinessException(ExceptionFactory.EMAIL_ALREADY_EXIST.get());
+        }
+        if(jwtSignUp.getPassword() == jwtSignUp.getMatchingPassword()){
+            throw new BusinessException(ExceptionFactory.ERROR_PASSWORD.get());
+        }
+        final Customer customer = new Customer();
+        customer.setLastName(jwtSignUp.getLastName());
+        customer.setFirstName(jwtSignUp.getFirstName());
+        customer.setEmail(jwtSignUp.getEmail());
+        customer.setPassword(passwordEncoder.encode(jwtSignUp.getPassword()));
+        customer.setRole(Role.USER);
+        customer.setAddresses(null);
+
+        return customerRepository.save(customer);
     }
-
 }

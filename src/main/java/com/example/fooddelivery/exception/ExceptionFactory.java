@@ -22,7 +22,11 @@ public enum ExceptionFactory {
     ORDER_NOT_FOUND(3, HttpStatus.NOT_FOUND, "order.not.found"),
 
     // ORDER :
-    PRODUCT_NOT_FOUND(3, HttpStatus.NOT_FOUND, "product.not.found");
+    PRODUCT_NOT_FOUND(3, HttpStatus.NOT_FOUND, "product.not.found"),
+    // ORDER :
+    EMAIL_ALREADY_EXIST(3, HttpStatus.CONFLICT, "email.already.exist"),
+
+    ERROR_PASSWORD(3, HttpStatus.UNAUTHORIZED, "password.unauthorized");
 
 
 

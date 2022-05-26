@@ -7,6 +7,7 @@ import com.example.fooddelivery.dto.CustomerDto;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.Customer;
 import com.example.fooddelivery.model.OrderEntity;
+import com.example.fooddelivery.payload.JwtResponse;
 import com.example.fooddelivery.payload.JwtSignUp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,5 +25,5 @@ public interface CustomerService {
 
     Customer deleteCustomer(String customerId);
 
-    void signup(JwtSignUp jwtSignUp);
+    Customer signup(JwtSignUp jwtSignUp);
 }
