@@ -68,4 +68,10 @@ public class CustomerController {
         customerService.deleteCustomer(customerId);
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/changePassword{customerId}")
+    public ResponseEntity<CustomerDto> changePassword(@PathVariable("customerId") final String customerId, String newPassword){
+        final Customer customer = customerService.changePasswordUser(customerId, newPassword);
+
+        return ResponseEntity.ok(customerMapper.toCustomerDto(customer));
+    }
 }

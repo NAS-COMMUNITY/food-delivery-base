@@ -27,7 +27,5 @@ public interface CustomerService {
 
     Customer signup(JwtSignUp jwtSignUp);
 
-    void changePasswordUser(Customer customer, String newPassword);
-
-    Customer findByEmail(String email);
+    Customer changePasswordUser(String customerId, String newPassword);
 }

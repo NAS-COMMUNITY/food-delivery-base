@@ -7,6 +7,7 @@ import com.example.fooddelivery.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,6 +39,7 @@ public class JavaConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().
                 authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/v1/customers/**").access("hasAuthority('ROLE_USER')")
                 .antMatchers("/v1/customers/**", "/v1/order/**", "/products/**", "/v1/address/**").access("hasAuthority('ROLE_ADMIN')")
                 .and()
                 .exceptionHandling().authenticationEntryPoint(pointJwt).and()

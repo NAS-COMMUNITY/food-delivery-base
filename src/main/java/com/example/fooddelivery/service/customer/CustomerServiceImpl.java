@@ -23,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.control.MappingControl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,6 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final PasswordEncoder passwordEncoder;
     private final CustomerMapper customerMapper;
+    private final JavaMailSender javaMailSender;
 
     @Override
     public Page<CustomerDto> getAll(Pageable pageable){
@@ -110,6 +113,7 @@ public class CustomerServiceImpl implements CustomerService {
         if(exist){
             throw new BusinessException(ExceptionFactory.EMAIL_ALREADY_EXIST.get());
         }
+
         final Customer customer = new Customer();
         customer.setLastName(jwtSignUp.getLastName());
         customer.setFirstName(jwtSignUp.getFirstName());
@@ -120,17 +124,15 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customerRepository.save(customer);
     }
-
     @Override
-    public void changePasswordUser(Customer customer, String newPassword) {
+    public Customer changePasswordUser(String customerId, String newPassword) {
+        log.info("Begin fetching customer with id {}", customerId);
+        final Customer customer1 = findById(customerId);
 
-    }
+        customer1.setPassword(newPassword);
 
-    @Override
-    public Customer findByEmail(String email) {
-        final  Customer customer = customerRepository.findByEmail(email).orElseThrow(() ->
-                new BusinessException(ExceptionFactory.EMAIL_ALREADY_EXIST.get()));
+        log.info("Changing password with new one {}", newPassword);
 
-        return customer;
+        return customer1;
     }
 }

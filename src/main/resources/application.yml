@@ -1,4 +1,18 @@
 spring:
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: anas.abbal66@gmail.com
+    password: zadina123
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    test-connection: false
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -28,3 +42,5 @@ spring:
 server:
   servlet:
     context-path: /api
+
+
