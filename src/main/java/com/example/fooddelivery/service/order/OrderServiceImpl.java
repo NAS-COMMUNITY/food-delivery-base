@@ -56,6 +56,7 @@ public class OrderServiceImpl implements OrderService{
         return orderEntities.map(orderMapper::toOrderDto);
     }
     @Override
+    @Transactional
     public OrderEntity create(final OrderEntityCommand orderEntityCommand){
         final Customer customer = orderEntityCommand.getCustomer() == null ? null : customerService.findById(orderEntityCommand.getCustomer());
         final Address bilAddress = orderEntityCommand.getBillingAddress() == null ? null: addressService.findAddressById(orderEntityCommand.getBillingAddress());
@@ -98,6 +99,7 @@ public class OrderServiceImpl implements OrderService{
         return orderRepository.save(orderEntity);
     }
     @Override
+    @Transactional
     public Address addBillingAddressToOrder(String orderId, AddressCommand addressCommand){
         final OrderEntity orderEntity = orderRepository.findById(orderId)
                 .orElseThrow(() -> new BusinessException(ExceptionFactory.ORDER_NOT_FOUND.get()));
@@ -110,6 +112,7 @@ public class OrderServiceImpl implements OrderService{
         return address;
     }
     @Override
+    @Transactional
     public Address addShippingAddressToOrder(String orderId, AddressCommand addressCommand){
         final OrderEntity orderEntity = orderRepository.findById(orderId)
                 .orElseThrow(() -> new BusinessException(ExceptionFactory.ORDER_NOT_FOUND.get()));
@@ -122,6 +125,7 @@ public class OrderServiceImpl implements OrderService{
         return address;
     }
     @Override
+    @Transactional
     public Product addProductToOrder(String orderId, ProductCommand productCommand) {
         final OrderEntity order = findOne(orderId);
 

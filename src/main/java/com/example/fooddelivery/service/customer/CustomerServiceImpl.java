@@ -29,6 +29,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
@@ -44,7 +45,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final PasswordEncoder passwordEncoder;
     private final CustomerMapper customerMapper;
-    private final JavaMailSender javaMailSender;
 
     @Override
     public Page<CustomerDto> getAll(Pageable pageable){
@@ -53,6 +53,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customers.map(customerMapper::toCustomerDto);
     }
 
+    @Transactional
     @Override
     public Address addAddressToCustomer(String customerId, AddressCommand addressCommand) {
         final Customer customer = findById(customerId);
@@ -64,6 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
         return address;
     }
     @Override
+    @Transactional
     public Customer createCustomer(final CustomerCommand customerCommand) {
         log.info("Begin creating customer with payload {}", JSONUtil.toJSON(customerCommand));
         final Customer customer = customerRepository.save(Customer.createOne(customerCommand));
