@@ -4,16 +4,15 @@ package com.example.fooddelivery.controller;
 import com.example.fooddelivery.dto.CustomerDto;
 import com.example.fooddelivery.mapper.CustomerMapper;
 import com.example.fooddelivery.model.Customer;
-import com.example.fooddelivery.payload.JwtRequest;
-import com.example.fooddelivery.payload.JwtResponse;
-import com.example.fooddelivery.payload.JwtSignUp;
-import com.example.fooddelivery.payload.UserDetailsImpl;
+import com.example.fooddelivery.payload.*;
 import com.example.fooddelivery.security.UserDetailsServiceImpl;
 import com.example.fooddelivery.service.customer.CustomerService;
 import com.example.fooddelivery.util.TokenHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -70,5 +69,11 @@ public class AuthController {
         final Customer customer = customerService.signup(jwtSignUp);
 
         return ResponseEntity.ok(customerMapper.toCustomerDto(customer));
+    }
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(){
+        ResponseCookie cookie = tokenHandler.getCleanJwtCookie();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(new ResponseMsg("You've been signed out!"));
     }
 }

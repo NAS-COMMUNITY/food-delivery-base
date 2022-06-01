@@ -19,10 +19,8 @@ public class Product extends AbstractEntity{
     @Enumerated(EnumType.STRING)
     private FoodType type;
 
-
     @ManyToOne(optional = false)
     private OrderEntity order;
-
 
     public Product(){
 

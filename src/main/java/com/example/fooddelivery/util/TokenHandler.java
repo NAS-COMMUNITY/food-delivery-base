@@ -3,6 +3,7 @@ package com.example.fooddelivery.util;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -30,6 +31,7 @@ public class TokenHandler {
     public static final String SIGNING_KEY = "nasnaXhubAbbal";
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
+    private static final String jwtCookie = "nasnas";
     public static final String AUTHORITIES_KEY = "scopes";
 
 
@@ -57,6 +59,10 @@ public class TokenHandler {
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
+    }
+    public ResponseCookie getCleanJwtCookie() {
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/api").build();
+        return cookie;
     }
 
     public String generateToken(Authentication authentication) {
