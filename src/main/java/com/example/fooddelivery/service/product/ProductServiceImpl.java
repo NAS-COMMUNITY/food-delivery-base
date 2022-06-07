@@ -2,8 +2,10 @@ package com.example.fooddelivery.service.product;
 
 
 import com.example.fooddelivery.command.ProductCommand;
+import com.example.fooddelivery.dto.ProductDto;
 import com.example.fooddelivery.exception.BusinessException;
 import com.example.fooddelivery.exception.ExceptionFactory;
+import com.example.fooddelivery.mapper.ProductMapper;
 import com.example.fooddelivery.model.Product;
 import com.example.fooddelivery.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductServiceImpl implements ProductService{
 
     private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
 
     @Override
-    public Page<Product> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable);
+    public Page<ProductDto> getAllProducts(Pageable pageable) {
+        Page<Product> products = productRepository.findAll(pageable);
+        return products.map(productMapper::toProductDto);
     }
 
     @Override
@@ -44,7 +48,6 @@ public class ProductServiceImpl implements ProductService{
         product.delete();
         return productRepository.save(product);
     }
-
     @Override
     public Product updateProduct(String productId, ProductCommand productCommand) {
         final Product product = findOneProduct(productId);

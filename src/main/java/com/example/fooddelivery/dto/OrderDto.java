@@ -19,7 +19,7 @@ public class OrderDto {
     private CustomerDto customer;
     private AddressDto billingAddress;
     private AddressDto shippingAddress;
-    private Set<ProductDto> productDtoSet;
+    private Set<ProductDto> products;
     private Status status;
     private Double price;
     private String rejectReason;
