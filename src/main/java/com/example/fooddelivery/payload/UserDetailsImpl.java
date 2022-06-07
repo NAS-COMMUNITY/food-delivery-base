@@ -14,10 +14,12 @@ import java.util.Collections;
 @Getter
 @Setter
 public class UserDetailsImpl implements UserDetails {
+    private String userId;
     private String email;
     private String password;
     private GrantedAuthority authorities;
-    public UserDetailsImpl(String email, String password, GrantedAuthority authorities) {
+    public UserDetailsImpl(String userId, String email, String password, GrantedAuthority authorities) {
+        this.userId = userId;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
@@ -25,6 +27,7 @@ public class UserDetailsImpl implements UserDetails {
     public static UserDetailsImpl build(Customer customer){
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + customer.getRole().name());
         return new UserDetailsImpl(
+                customer.getId(),
                 customer.getEmail(),
                 customer.getPassword(),
                 authority

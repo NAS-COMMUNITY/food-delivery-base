@@ -35,7 +35,7 @@ public class OrderController {
     private final OrderMapper orderMapper;
     private final ProductMapper productMapper;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<Page<OrderDto>> getAll(Pageable pageable){
         return ResponseEntity.ok(orderService.getAll(pageable));
     }

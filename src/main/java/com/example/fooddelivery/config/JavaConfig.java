@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,6 +23,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true)
 public class JavaConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
@@ -39,8 +44,8 @@ public class JavaConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().
                 authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/v1/customers/**").access("hasAuthority('ROLE_USER')")
-                .antMatchers("/v1/customers/**", "/v1/order/**", "/products/**", "/v1/address/**").access("hasAuthority('ROLE_ADMIN')")
+                /*.antMatchers(HttpMethod.PUT, "/v1/customers/**").access("hasAuthority('ROLE_USER')")
+                .antMatchers("/v1/customers/**", "/v1/order/**", "/products/**", "/v1/address/**").access("hasAuthority('ROLE_ADMIN')")*/
                 .and()
                 .exceptionHandling().authenticationEntryPoint(pointJwt).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -121,7 +121,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setFirstName(jwtSignUp.getFirstName());
         customer.setEmail(jwtSignUp.getEmail());
         customer.setPassword(passwordEncoder.encode(jwtSignUp.getPassword()));
-        customer.setRole(Role.ADMIN);
+        customer.setRole(Role.USER);
         customer.setAddresses(null);
 
         return customerRepository.save(customer);

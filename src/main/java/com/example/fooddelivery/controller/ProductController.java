@@ -23,7 +23,7 @@ public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<Page<ProductDto>> getAll(Pageable pageable){
 
         return ResponseEntity.ok(productService.getAllProducts(pageable));
