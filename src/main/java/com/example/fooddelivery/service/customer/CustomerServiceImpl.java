@@ -2,37 +2,27 @@ package com.example.fooddelivery.service.customer;
 
 import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.CustomerCommand;
-import com.example.fooddelivery.command.OrderEntityCommand;
 import com.example.fooddelivery.dto.CustomerDto;
 import com.example.fooddelivery.enums.Role;
 import com.example.fooddelivery.exception.BusinessException;
 import com.example.fooddelivery.exception.ExceptionFactory;
-import com.example.fooddelivery.exception.ExceptionPayload;
-import com.example.fooddelivery.exception.ExceptionPayloadFactory;
 import com.example.fooddelivery.mapper.CustomerMapper;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.Customer;
-import com.example.fooddelivery.payload.JwtResponse;
 import com.example.fooddelivery.payload.JwtSignUp;
 import com.example.fooddelivery.repository.AddressRepository;
 import com.example.fooddelivery.repository.CustomerRepository;
-import com.example.fooddelivery.service.address.AddressService;
 import com.example.fooddelivery.util.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mapstruct.control.MappingControl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.temporal.ChronoUnit;
-import java.util.Set;
+import java.util.Optional;
 
 
 @Service
@@ -45,6 +35,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final PasswordEncoder passwordEncoder;
     private final CustomerMapper customerMapper;
+
+    private final JavaMailSender mailSender;
 
     @Override
     public Page<CustomerDto> getAll(Pageable pageable){
@@ -126,6 +118,31 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customerRepository.save(customer);
     }
+    /*public void sendVerificationEmail(@NonNull Customer customer, String siteURL) throws MessagingException, UnsupportedEncodingException {
+        String toAddress = customer.getEmail();
+        String fromAddress = "anas.abbal10@gmail.com";
+        String senderName = "Xhub Code Kraken";
+        String subject = "Please verify your registration";
+        String content = "Dear [[name]],<br>"
+                + "Please click the link below to verify your registration:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Thank you,<br>"
+                + "Xhub.";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", customer.getFirstName());
+        String verifyURL = siteURL + "/verify?code=" + customer.getVerificationCode();
+
+        content = content.replace("[[URL]]", verifyURL);
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }*/
     @Override
     public Customer changePasswordUser(String customerId, String newPassword) {
         log.info("Begin fetching customer with id {}", customerId);
@@ -136,5 +153,10 @@ public class CustomerServiceImpl implements CustomerService {
         log.info("Changing password with new one {}", newPassword);
 
         return customer1;
+    }
+
+    @Override
+    public Optional<Customer> findByEmail(String email) {
+        return customerRepository.findByEmail(email);
     }
 }

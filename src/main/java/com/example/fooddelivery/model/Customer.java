@@ -29,6 +29,9 @@ public class Customer extends AbstractEntity{
 
     private String password;
 
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

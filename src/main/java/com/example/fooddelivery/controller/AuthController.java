@@ -23,9 +23,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.apache.commons.lang3.StringUtils;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.fooddelivery.cons.ResourcePath.AUTH;
@@ -65,7 +66,7 @@ public class AuthController {
         return ResponseEntity.ok().body(new JwtResponse(token, base.getUsername(), roles));
     }
     @PostMapping("/signup")
-    public ResponseEntity<CustomerDto> signup(@RequestBody @Valid JwtSignUp jwtSignUp){
+    public ResponseEntity<CustomerDto> signup(@RequestBody @Valid JwtSignUp jwtSignUp) {
         final Customer customer = customerService.signup(jwtSignUp);
 
         return ResponseEntity.ok(customerMapper.toCustomerDto(customer));

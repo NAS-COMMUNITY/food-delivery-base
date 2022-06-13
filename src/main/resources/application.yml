@@ -1,4 +1,15 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 578
+    username: anas.abbal10@gmail.com
+    password: zadina@@zadina1234
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

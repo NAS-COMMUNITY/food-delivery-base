@@ -144,7 +144,11 @@ public class OrderServiceImpl implements OrderService{
 
         return order;
     }
-    public Product findProductByOrderId(String orderId){
+    public Product findProductByOrderId(String orderId, String productId){
+        final Product product = productService.findOneProduct(productId);
+
+        final OrderEntity order = findOne(orderId);
+
         return null;
     }
     @Override
