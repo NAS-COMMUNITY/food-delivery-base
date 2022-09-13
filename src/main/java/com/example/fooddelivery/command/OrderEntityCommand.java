@@ -17,9 +17,7 @@ public class OrderEntityCommand implements Validate {
     private String customer;
     private String billingAddress;
     private String shippingAddress;
-    private Status status;
-    private String rejectReason;
-    private Set<ProductCommand> productCommands;
+    private Set<FoodItemCommand> foodItemCommands;
 
     @Override
     public void validate() {

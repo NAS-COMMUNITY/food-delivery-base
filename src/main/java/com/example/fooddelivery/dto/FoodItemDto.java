@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class ProductDto {
+public class FoodItemDto {
     private String id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

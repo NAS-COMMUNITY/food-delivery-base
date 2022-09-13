@@ -18,8 +18,6 @@ public class Address extends AbstractEntity{
     private String country;
     @ManyToOne(optional = false)
     private Customer customer;
-
-
     public Address(){
 
     }
@@ -42,14 +40,13 @@ public class Address extends AbstractEntity{
 
         return address;
     }
-
-    public void linkToCustomer(Customer customer){
-        this.customer = customer;
-    }
     public void update(final AddressCommand addressCommand){
         this.city = city;
         this.country = country;
         this.street = street;
+    }
+    public void linkToCustomer(Customer customer){
+        this.customer = customer;
     }
 
     @Override

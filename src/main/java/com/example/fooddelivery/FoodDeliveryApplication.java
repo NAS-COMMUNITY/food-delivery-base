@@ -1,24 +1,8 @@
 package com.example.fooddelivery;
 
-import com.example.fooddelivery.enums.FoodType;
-import com.example.fooddelivery.enums.Status;
-import com.example.fooddelivery.model.Address;
-import com.example.fooddelivery.model.Customer;
-import com.example.fooddelivery.model.OrderEntity;
-import com.example.fooddelivery.model.Product;
-import com.example.fooddelivery.repository.AddressRepository;
-import com.example.fooddelivery.repository.CustomerRepository;
-import com.example.fooddelivery.repository.OrderRepository;
-import com.example.fooddelivery.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -54,7 +38,7 @@ public class FoodDeliveryApplication{
         order.setShippingAddress(address);
         order.setStatus(Status.REJECTED);
 
-        Product product = new Product();
+        FoodItem product = new FoodItem();
         product.setType(FoodType.TACOS);
 
         product.setOrder(order);

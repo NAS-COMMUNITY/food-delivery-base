@@ -2,7 +2,7 @@
 - user can signup and login and 
 
 
-![](./screen/product.png)
+![](./screen/foodItem.png)
 
 
 ![](./screen/order.png)
@@ -58,7 +58,7 @@
                 "createdAt": "2022-05-25T14:45:13.739097",
                 "updatedAt": "2022-05-25T14:45:13.739097"
             },
-            "products": [
+            "foodItems": [
                 {
                     "type": "TACOS",
                     "price": 500.00
