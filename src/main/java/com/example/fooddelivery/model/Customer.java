@@ -6,8 +6,7 @@ import com.example.fooddelivery.command.CustomerCommand;
 import com.example.fooddelivery.command.OrderEntityCommand;
 import com.example.fooddelivery.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.criterion.Order;
 
 import javax.management.relation.RoleStatus;
@@ -18,46 +17,24 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
-@Setter
+@Table(name = "CUSTOMERS")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Customer extends AbstractEntity{
-
+    @Column(name = "FIRST_NAME")
     private String firstName;
+    @Column(name = "LAST_NAME")
     private String lastName;
-
     //  a single email address cannot be used by multiple customers
+    @Column(name = "EMAIL")
     private String email;
-
+    @Column(name = "PASSWORD")
     private String password;
-
-    @Column(name = "verification_code", length = 64)
-    private String verificationCode;
-
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToOne
+    private Payment payment;
 
-    /**
-     * whenever we initially persist, update, or delete a customer,
-     * the Addresses will be persisted, updated, or deleted as well.
-     *
-     * orphanRemoval => delete orphaned entities from the database,
-     * An entity that is no longer attached to its parent is the definition of being an orphan.
-     *
-     * @JoinColumn => add another column to the table backing the Address object.
-     * This additional column will then be used to refer to the Customer to allow joining the tables
-     */
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "customer")
-    @JsonIgnore
-    private Set<Address> addresses;
-
-    public Customer(){
-
-    }
-
-    public Customer(String firstName, String lastName) {
-
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
     public static Customer createOne(final CustomerCommand customerCommand){
         final Customer customer = new Customer();
 
@@ -65,21 +42,9 @@ public class Customer extends AbstractEntity{
         customer.lastName = customerCommand.getLastName();
         customer.email = customerCommand.getEmail();
         customer.password = customerCommand.getPassword();
-        customer.role = customerCommand.getRole();
-        customer.addresses = createAddress(customerCommand.getAddressCommands());
-        customer.addresses.forEach(address -> address.linkToCustomer(customer));
-
+        customer.role = Role.USER;
+        customer.payment = Payment.create(customer, null, 0.0, null);
         return customer;
-    }
-    public Address addAddress(final AddressCommand addressCommand){
-        final Address address = Address.create(addressCommand);
-
-        address.linkToCustomer(this);
-
-        return address;
-    }
-    public static Set<Address> createAddress(final Set<AddressCommand> addressCommands){
-        return addressCommands.stream().map(Address::create).collect(Collectors.toSet());
     }
     public void update(final CustomerCommand customerCommand){
         this.firstName = customerCommand.getFirstName();

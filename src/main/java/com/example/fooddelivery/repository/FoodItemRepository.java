@@ -1,10 +1,10 @@
 package com.example.fooddelivery.repository;
 
-import com.example.fooddelivery.model.Product;
+import com.example.fooddelivery.model.FoodItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, String> {
+public interface FoodItemRepository extends JpaRepository<FoodItem, String> {
 }

@@ -45,17 +45,6 @@ public class CustomerServiceImpl implements CustomerService {
         return customers.map(customerMapper::toCustomerDto);
     }
 
-    @Transactional
-    @Override
-    public Address addAddressToCustomer(String customerId, AddressCommand addressCommand) {
-        final Customer customer = findById(customerId);
-        log.info("Begin creating and adding address with payload {} to customer with id {}", JSONUtil.toJSON(addressCommand), customerId);
-
-        final Address address = addressRepository.save(customer.addAddress(addressCommand));
-        log.info("New address has been added successfully to customer with id {}", customerId);
-
-        return address;
-    }
     @Override
     @Transactional
     public Customer createCustomer(final CustomerCommand customerCommand) {
@@ -99,62 +88,6 @@ public class CustomerServiceImpl implements CustomerService {
 
         return customerRepository.save(customer);
     }
-
-    @Override
-    public Customer signup(JwtSignUp jwtSignUp) {
-        Boolean exist = customerRepository.selectExistsEmail(jwtSignUp.getEmail());
-
-        if(exist){
-            throw new BusinessException(ExceptionFactory.EMAIL_ALREADY_EXIST.get());
-        }
-
-        final Customer customer = new Customer();
-        customer.setLastName(jwtSignUp.getLastName());
-        customer.setFirstName(jwtSignUp.getFirstName());
-        customer.setEmail(jwtSignUp.getEmail());
-        customer.setPassword(passwordEncoder.encode(jwtSignUp.getPassword()));
-        customer.setRole(Role.USER);
-        customer.setAddresses(null);
-
-        return customerRepository.save(customer);
-    }
-    /*public void sendVerificationEmail(@NonNull Customer customer, String siteURL) throws MessagingException, UnsupportedEncodingException {
-        String toAddress = customer.getEmail();
-        String fromAddress = "anas.abbal10@gmail.com";
-        String senderName = "Xhub Code Kraken";
-        String subject = "Please verify your registration";
-        String content = "Dear [[name]],<br>"
-                + "Please click the link below to verify your registration:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-                + "Thank you,<br>"
-                + "Xhub.";
-
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-        helper.setFrom(fromAddress, senderName);
-        helper.setTo(toAddress);
-        helper.setSubject(subject);
-
-        content = content.replace("[[name]]", customer.getFirstName());
-        String verifyURL = siteURL + "/verify?code=" + customer.getVerificationCode();
-
-        content = content.replace("[[URL]]", verifyURL);
-        helper.setText(content, true);
-
-        mailSender.send(message);
-    }*/
-    @Override
-    public Customer changePasswordUser(String customerId, String newPassword) {
-        log.info("Begin fetching customer with id {}", customerId);
-        final Customer customer1 = findById(customerId);
-
-        customer1.setPassword(newPassword);
-
-        log.info("Changing password with new one {}", newPassword);
-
-        return customer1;
-    }
-
     @Override
     public Optional<Customer> findByEmail(String email) {
         return customerRepository.findByEmail(email);

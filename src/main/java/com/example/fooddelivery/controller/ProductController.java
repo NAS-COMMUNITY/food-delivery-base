@@ -2,11 +2,11 @@ package com.example.fooddelivery.controller;
 
 
 
-import com.example.fooddelivery.command.ProductCommand;
-import com.example.fooddelivery.dto.ProductDto;
-import com.example.fooddelivery.mapper.ProductMapper;
-import com.example.fooddelivery.model.Product;
-import com.example.fooddelivery.service.product.ProductService;
+import com.example.fooddelivery.command.FoodItemCommand;
+import com.example.fooddelivery.dto.FoodItemDto;
+import com.example.fooddelivery.mapper.FoodItemMapper;
+import com.example.fooddelivery.model.FoodItem;
+import com.example.fooddelivery.service.foodItem.FoodItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,29 +20,29 @@ import static com.example.fooddelivery.cons.ResourcePath.*;
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductService productService;
-    private final ProductMapper productMapper;
+    private final FoodItemService foodItemService;
+    private final FoodItemMapper foodItemMapper;
 
     @GetMapping
-    public ResponseEntity<Page<ProductDto>> getAll(Pageable pageable){
+    public ResponseEntity<Page<FoodItemDto>> getFoodItems(Pageable pageable){
 
-        return ResponseEntity.ok(productService.getAllProducts(pageable));
+        return ResponseEntity.ok(foodItemService.getAllFoodItems(pageable));
     }
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable("productId") final String productId){
-        final Product product = productService.findOneProduct(productId);
+    public ResponseEntity<FoodItemDto> getOne(@PathVariable("productId") final String productId){
+        final FoodItem foodItem = foodItemService.findOneFoodItem(productId);
 
-        return ResponseEntity.ok(productMapper.toProductDto(product));
+        return ResponseEntity.ok(foodItemMapper.toProductDto(foodItem));
     }
     @PutMapping("/{productId}")
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable("productId")final String productId,
-                                                    final ProductCommand productCommand){
-        final Product product = productService.updateProduct(productId, productCommand);
-        return ResponseEntity.ok(productMapper.toProductDto(product));
+    public ResponseEntity<FoodItemDto> update(@PathVariable("productId")final String productId,
+                                                     final FoodItemCommand foodItemCommand){
+        final FoodItem foodItem = foodItemService.updateFoodItem(productId, foodItemCommand);
+        return ResponseEntity.ok(foodItemMapper.toProductDto(foodItem));
     }
     @DeleteMapping("/{productId}")
-    public ResponseEntity<ProductDto> deleteProductById(@PathVariable("productId")final String productId){
-        productService.deleteById(productId);
+    public ResponseEntity<FoodItemDto> deleteById(@PathVariable("productId")final String productId){
+        foodItemService.deleteById(productId);
         return ResponseEntity.noContent().build();
     }
 }
