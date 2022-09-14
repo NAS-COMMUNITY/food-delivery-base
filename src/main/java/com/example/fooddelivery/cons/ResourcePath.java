@@ -8,4 +8,6 @@ public class ResourcePath {
     public final static String PRODUCT = "/products";
     public final static String FOOD_MENU = "/food-menu";
     public final static String FOOD_ITEM = "/food-item";
+    public final static String CATEGORIES = "/categories";
+    public final static String PAYMENT = "/payment";
 }

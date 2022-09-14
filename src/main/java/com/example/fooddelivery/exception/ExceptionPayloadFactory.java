@@ -18,7 +18,9 @@ public enum ExceptionPayloadFactory {
     CUSTOMER_NOT_FOUND(5, HttpStatus.NOT_FOUND, "customer.not.found"),
 
     ORDER_NOT_FOUND(5, HttpStatus.NOT_FOUND, "order.not.found"),
-    FOOD_MENU_NOT_FOUND(6, HttpStatus.NOT_FOUND, "food.menu.not.found");
+    FOOD_MENU_NOT_FOUND(6, HttpStatus.NOT_FOUND, "food.menu.not.found"),
+    CATEGORY_NOT_FOND(7, HttpStatus.NOT_FOUND, "category.not.found"),
+    PAYMENT_NOT_FOUND(8, HttpStatus.NOT_FOUND, "payment.not.found");
 
 
 
