@@ -18,7 +18,7 @@ import java.net.URI;
 import static com.example.fooddelivery.cons.ResourcePath.*;
 
 @RestController
-@RequestMapping(PRODUCT)
+@RequestMapping(V1 + FOOD_ITEM)
 @RequiredArgsConstructor
 public class FoodItemController {
 

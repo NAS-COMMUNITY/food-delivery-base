@@ -18,7 +18,6 @@ public class CustomerCommand implements Validate {
     private String lastName;
     private String email;
     private String password;
-    private Role role;
 
     @Override
     public void validate() {

@@ -1,22 +1,15 @@
 package com.example.fooddelivery.model;
 
 
-import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.CustomerCommand;
-import com.example.fooddelivery.command.OrderEntityCommand;
 import com.example.fooddelivery.enums.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.criterion.Order;
 
-import javax.management.relation.RoleStatus;
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "CUSTOMERS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,7 +25,7 @@ public class Customer extends AbstractEntity{
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Payment payment;
 
     public static Customer createOne(final CustomerCommand customerCommand){
@@ -51,7 +44,6 @@ public class Customer extends AbstractEntity{
         this.lastName = customerCommand.getLastName();
         this.email = customerCommand.getEmail();
         this.password = customerCommand.getPassword();
-        this.role = customerCommand.getRole();
     }
     @Override
     public void delete() {

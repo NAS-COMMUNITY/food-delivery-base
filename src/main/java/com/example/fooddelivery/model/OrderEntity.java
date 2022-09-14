@@ -30,7 +30,6 @@ public class OrderEntity extends AbstractEntity{
     @Enumerated(EnumType.STRING)
     private Status status;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "orderEntity")
-    @JsonIgnore
     private Set<FoodItem> foodItems;
 
     private Double price;

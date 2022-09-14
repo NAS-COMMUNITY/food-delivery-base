@@ -10,4 +10,5 @@ public class AccountDTO {
     private String id;
     private CustomerDto customer;
     private String status;
+    private FoodMenuDTO foodMenu;
 }

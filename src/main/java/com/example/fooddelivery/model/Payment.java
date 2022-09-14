@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Payment extends AbstractEntity{
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Customer customer;
 
     @Column(name = "PAYMENT_TIME")
@@ -28,7 +28,7 @@ public class Payment extends AbstractEntity{
     @Column(name = "PAYMENT_STATUS")
     private PaymentStatus status;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private OrderEntity orderEntity;
 
     public static Payment create(final Customer customer,

@@ -20,12 +20,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
-import static com.example.fooddelivery.cons.ResourcePath.FOOD_ITEM;
+import static com.example.fooddelivery.cons.ResourcePath.*;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping(V1 + ORDERS)
 @RequiredArgsConstructor
 public class OrderController {
 
