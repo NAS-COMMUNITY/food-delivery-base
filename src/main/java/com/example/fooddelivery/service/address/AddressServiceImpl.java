@@ -5,7 +5,7 @@ import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.dto.AddressDto;
 import com.example.fooddelivery.exception.BusinessException;
 import com.example.fooddelivery.exception.ExceptionFactory;
-import com.example.fooddelivery.mapper.AddressMapper;
+import com.example.fooddelivery.dto.mapper.AddressMapper;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.repository.AddressRepository;
 import com.example.fooddelivery.util.JSONUtil;
@@ -15,8 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -64,10 +62,5 @@ public class AddressServiceImpl implements AddressService{
         log.info("Address with id {} fetched successfully", addressId);
 
         return address;
-    }
-
-    @Override
-    public Set<Address> findById(Set<String> id) {
-        return new HashSet<>(addressRepository.findAllById(id));
     }
 }

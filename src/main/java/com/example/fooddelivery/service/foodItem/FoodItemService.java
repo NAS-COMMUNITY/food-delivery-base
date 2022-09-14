@@ -13,6 +13,6 @@ public interface FoodItemService {
     FoodItem findOneFoodItem(String productId);
 
     Page<FoodItemDto> getAllFoodItems(Pageable pageable);
-    FoodItem deleteById(String productId);
+    void deleteById(String productId);
     FoodItem updateFoodItem(String productId, FoodItemCommand foodItemCommand);
 }

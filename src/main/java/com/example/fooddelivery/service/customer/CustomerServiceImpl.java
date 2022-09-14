@@ -1,15 +1,11 @@
 package com.example.fooddelivery.service.customer;
 
-import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.command.CustomerCommand;
 import com.example.fooddelivery.dto.CustomerDto;
-import com.example.fooddelivery.enums.Role;
 import com.example.fooddelivery.exception.BusinessException;
 import com.example.fooddelivery.exception.ExceptionFactory;
-import com.example.fooddelivery.mapper.CustomerMapper;
-import com.example.fooddelivery.model.Address;
+import com.example.fooddelivery.dto.mapper.CustomerMapper;
 import com.example.fooddelivery.model.Customer;
-import com.example.fooddelivery.payload.JwtSignUp;
 import com.example.fooddelivery.repository.AddressRepository;
 import com.example.fooddelivery.repository.CustomerRepository;
 import com.example.fooddelivery.util.JSONUtil;

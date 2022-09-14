@@ -37,7 +37,7 @@ public interface AssertValidation {
             throw new RuntimeException("");
         }
     }
-    static boolean isEmpty(String firstName){
+    static boolean isEmpty(Object firstName){
         if(firstName == null){
             throw new RuntimeException();
         }

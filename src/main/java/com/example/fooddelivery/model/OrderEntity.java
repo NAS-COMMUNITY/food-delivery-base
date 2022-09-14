@@ -14,7 +14,6 @@ import javax.persistence.*;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.example.fooddelivery.enums.Status.PENDING;
 
 @Entity
 @Getter
@@ -30,11 +29,6 @@ public class OrderEntity extends AbstractEntity{
 
     @Enumerated(EnumType.STRING)
     private Status status;
-    /**
-     * LAZY = fetch when needed
-     * EAGER = fetch immediately
-     * If your need more check ====> https://stackoverflow.com/questions/2990799/difference-between-fetchtype-lazy-and-eager-in-java-persistence-api
-     */
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "order")
     @JsonIgnore
     private Set<FoodItem> foodItems;
@@ -56,7 +50,6 @@ public class OrderEntity extends AbstractEntity{
         orderEntity.shippingAddress = shippingAddress;
         orderEntity.foodItems = createProduct(orderEntityCommand.getFoodItemCommands());
 
-
         return orderEntity;
     }
     public static Set<FoodItem> createProduct(Set<FoodItemCommand> foodItemCommands){
@@ -72,13 +65,15 @@ public class OrderEntity extends AbstractEntity{
         this.foodItems.remove(foodItem);
         this.price -= foodItem.getPrice();
     }
-    public Address linkToAddress(final AddressCommand billingAddress){
-        final Address address = Address.create(billingAddress);
-
-        return address;
+    public void linkToShippingAddress(Address address){
+        this.shippingAddress = address;
     }
-    public void update(final  OrderEntityCommand orderEntityCommand){
-
+    public void linkToBillingAddress(Address address){
+        this.billingAddress = address;
+    }
+    public void update(final Address billingAddress, Address shippingAddress){
+        this.shippingAddress = shippingAddress;
+        this.billingAddress = billingAddress;
     }
     @Override
     public void delete() {

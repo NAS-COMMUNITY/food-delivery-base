@@ -1,8 +1,6 @@
 package com.example.fooddelivery.command;
 
 
-
-import com.example.fooddelivery.enums.Status;
 import com.example.fooddelivery.util.AssertValidation;
 import com.example.fooddelivery.util.Validate;
 import lombok.Getter;
@@ -23,6 +21,6 @@ public class OrderEntityCommand implements Validate {
     public void validate() {
         AssertValidation.isEmpty(customer);
         AssertValidation.isEmpty(billingAddress);
-        AssertValidation.isEmail(shippingAddress);
+        AssertValidation.isEmpty(shippingAddress);
     }
 }

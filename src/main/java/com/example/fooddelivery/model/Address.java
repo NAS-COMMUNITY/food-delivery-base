@@ -41,12 +41,9 @@ public class Address extends AbstractEntity{
         return address;
     }
     public void update(final AddressCommand addressCommand){
-        this.city = city;
-        this.country = country;
-        this.street = street;
-    }
-    public void linkToCustomer(Customer customer){
-        this.customer = customer;
+        this.city = addressCommand.getCity();
+        this.country = addressCommand.getCountry();
+        this.street = addressCommand.getStreet();
     }
 
     @Override

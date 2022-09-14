@@ -2,15 +2,13 @@ package com.example.fooddelivery.controller;
 
 
 
-import com.example.fooddelivery.command.AddressCommand;
-import com.example.fooddelivery.command.FoodItemCommand;
-import com.example.fooddelivery.command.OrderEntityCommand;
+import com.example.fooddelivery.command.*;
 import com.example.fooddelivery.dto.AddressDto;
-import com.example.fooddelivery.dto.OrderDto;
 import com.example.fooddelivery.dto.FoodItemDto;
-import com.example.fooddelivery.mapper.AddressMapper;
-import com.example.fooddelivery.mapper.OrderMapper;
-import com.example.fooddelivery.mapper.FoodItemMapper;
+import com.example.fooddelivery.dto.OrderDto;
+import com.example.fooddelivery.dto.mapper.AddressMapper;
+import com.example.fooddelivery.dto.mapper.FoodItemMapper;
+import com.example.fooddelivery.dto.mapper.OrderMapper;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.model.FoodItem;
 import com.example.fooddelivery.model.OrderEntity;
@@ -21,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
+
+import static com.example.fooddelivery.cons.ResourcePath.FOOD_ITEM;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentRequest;
 
 
@@ -66,10 +66,19 @@ public class OrderController {
     }
     @PutMapping("/{orderId}")
     public ResponseEntity<OrderDto> updateOrder(@PathVariable("orderId") String orderId,
-                                                @RequestBody final OrderEntityCommand orderEntityCommand){
-        final OrderEntity order = orderService.update(orderId, orderEntityCommand);
-
+                                                @RequestBody final UpdateOrderRequest updateOrderRequest){
+        final OrderEntity order = orderService.update(orderId, updateOrderRequest);
         return ResponseEntity.ok(orderMapper.toOrderDto(order));
     }
-
+    @PostMapping("/{orderId}" + FOOD_ITEM)
+    public ResponseEntity<FoodItemDto> addFoodItem(@PathVariable("orderId") final String orderId, @RequestBody final FoodItemCommand foodItemCommand){
+        final FoodItem foodItem = orderService.addFoodItem(orderId, foodItemCommand);
+        final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(foodItem.getId()).toUri();
+        return ResponseEntity.created(uri).body(foodItemMapper.toProductDto(foodItem));
+    }
+    @PostMapping
+    public ResponseEntity<Void> removeFoodItem(@RequestBody final OrderFoodItemRequest orderFoodItemRequest){
+        orderService.removeFoodItemFormOrder(orderFoodItemRequest);
+        return ResponseEntity.noContent().build();
+    }
 }
