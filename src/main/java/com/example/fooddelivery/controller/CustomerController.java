@@ -57,6 +57,7 @@ public class CustomerController {
         return ResponseEntity.ok().body(customerMapper.toCustomerDto(customer));
     }
     @DeleteMapping("/{customerId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCustomer(@PathVariable("customerId") String customerId){
         customerService.deleteCustomer(customerId);
         return ResponseEntity.noContent().build();

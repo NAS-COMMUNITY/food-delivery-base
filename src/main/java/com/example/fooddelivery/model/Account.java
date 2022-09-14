@@ -20,15 +20,15 @@ public class Account extends AbstractEntity{
     @Column(name = "STATUS")
     private AccountStatus status;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private FoodMenu foodMenu;
 
-    public static Account create(final Customer customer, AccountStatus status, FoodMenu foodMenu){
+    public static Account create(final Customer customer){
         final Account account = new Account();
 
         account.customer = customer;
-        account.status = status;
-        account.foodMenu = foodMenu;
+        account.status = AccountStatus.NEW;
+        account.foodMenu = new FoodMenu();
 
         return account;
     }

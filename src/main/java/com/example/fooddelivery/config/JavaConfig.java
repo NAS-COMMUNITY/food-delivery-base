@@ -43,7 +43,7 @@ public class JavaConfig extends WebSecurityConfigurerAdapter {
         // Disabling csrf
         http.cors().and().csrf().disable().
                 authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/v1/**").permitAll()
                 /*.antMatchers(HttpMethod.PUT, "/v1/customers/**").access("hasAuthority('ROLE_USER')")
                 .antMatchers("/v1/customers/**", "/v1/order/**", "/products/**", "/v1/address/**").access("hasAuthority('ROLE_ADMIN')")*/
                 .and()

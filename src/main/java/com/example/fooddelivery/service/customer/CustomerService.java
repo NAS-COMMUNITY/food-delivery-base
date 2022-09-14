@@ -6,7 +6,7 @@ import com.example.fooddelivery.model.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
+
 public interface CustomerService {
 
     Customer createCustomer(final CustomerCommand customerCommand);
@@ -14,5 +14,5 @@ public interface CustomerService {
     Customer findById(String customerId);
     Customer update(String customerId, CustomerCommand customerCommand);
     Customer deleteCustomer(String customerId);
-    Optional<Customer> findByEmail(String email);
+    Customer getCurrentUser();
 }

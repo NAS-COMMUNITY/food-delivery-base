@@ -1,6 +1,6 @@
 package com.example.fooddelivery.payload;
 
-import com.example.fooddelivery.model.Customer;
+import com.example.fooddelivery.model.Account;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,21 +18,24 @@ public class UserDetailsImpl implements UserDetails {
     private String email;
     private String password;
     private GrantedAuthority authorities;
-    public UserDetailsImpl(String userId, String email, String password, GrantedAuthority authorities) {
+    private String status;
+    public UserDetailsImpl(String userId, String email, String password, GrantedAuthority authorities, String status) {
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.status = status;
     }
-    public static UserDetailsImpl build(Customer customer){
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + customer.getRole().name());
+    public static UserDetailsImpl build(Account account){
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + account.getCustomer().getRole().name());
         return new UserDetailsImpl(
-                customer.getId(),
-                customer.getEmail(),
-                customer.getPassword(),
-                authority
-        );
+                account.getCustomer().getId(),
+                account.getCustomer().getEmail(),
+                account.getCustomer().getPassword(),
+                authority,
+                String.valueOf(account.getStatus()));
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(authorities);

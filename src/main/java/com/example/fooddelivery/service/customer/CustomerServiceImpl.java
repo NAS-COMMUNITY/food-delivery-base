@@ -5,20 +5,19 @@ import com.example.fooddelivery.dto.CustomerDto;
 import com.example.fooddelivery.exception.BusinessException;
 import com.example.fooddelivery.exception.ExceptionFactory;
 import com.example.fooddelivery.dto.mapper.CustomerMapper;
+import com.example.fooddelivery.exception.ExceptionPayloadFactory;
 import com.example.fooddelivery.model.Customer;
-import com.example.fooddelivery.repository.AddressRepository;
 import com.example.fooddelivery.repository.CustomerRepository;
 import com.example.fooddelivery.util.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 
 @Service
@@ -27,12 +26,8 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final AddressRepository addressRepository;
-
-    private final PasswordEncoder passwordEncoder;
     private final CustomerMapper customerMapper;
 
-    private final JavaMailSender mailSender;
 
     @Override
     public Page<CustomerDto> getAll(Pageable pageable){
@@ -67,25 +62,31 @@ public class CustomerServiceImpl implements CustomerService {
 
         final Customer customer = findById(customerId);
         customer.update(customerCommand);
-
         log.info("updating customer with id {} successfully", customer.getId());
-
         return customer;
     }
 
     @Override
     public Customer deleteCustomer(String customerId) {
         log.info("Begin deleting customer with id {}", customerId);
-
         final Customer customer = findById(customerId);
-
         customer.delete();
         log.info("customer with id {} dleted successfully", customer.getId());
 
         return customerRepository.save(customer);
     }
+
     @Override
-    public Optional<Customer> findByEmail(String email) {
-        return customerRepository.findByEmail(email);
+    public Customer getCurrentUser() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+
+        String email = userDetails.getUsername();
+        return findByEmail(email);
+
+    }
+    private Customer findByEmail(String email) {
+        return customerRepository.findByEmail(email).orElseThrow(() ->
+                new BusinessException(ExceptionPayloadFactory.CUSTOMER_NOT_FOUND.get()));
     }
 }
