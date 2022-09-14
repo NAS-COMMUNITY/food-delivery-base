@@ -21,7 +21,7 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/deliv}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/nDeliv}
     username: ${DATABASE_USER:postgres}
     password: ${DATABASE_PASSWORD:postgres}
 

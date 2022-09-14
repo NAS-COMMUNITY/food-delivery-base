@@ -63,12 +63,12 @@ public class AuthController {
 
         return ResponseEntity.ok().body(new JwtResponse(token, base.getUsername(), roles));
     }
-    @PostMapping("/signup")
+    /*@PostMapping("/signup")
     public ResponseEntity<CustomerDto> signup(@RequestBody @Valid JwtSignUp jwtSignUp) {
         final Customer customer = customerService.signup(jwtSignUp);
 
         return ResponseEntity.ok(customerMapper.toCustomerDto(customer));
-    }
+    }*/
     @PostMapping("/logout")
     public ResponseEntity<?> logout(){
         ResponseCookie cookie = tokenHandler.getCleanJwtCookie();
