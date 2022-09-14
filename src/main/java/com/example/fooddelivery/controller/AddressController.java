@@ -3,7 +3,7 @@ package com.example.fooddelivery.controller;
 
 import com.example.fooddelivery.command.AddressCommand;
 import com.example.fooddelivery.dto.AddressDto;
-import com.example.fooddelivery.mapper.AddressMapper;
+import com.example.fooddelivery.dto.mapper.AddressMapper;
 import com.example.fooddelivery.model.Address;
 import com.example.fooddelivery.service.address.AddressService;
 import io.swagger.annotations.ApiOperation;
@@ -37,7 +37,6 @@ public class AddressController {
     public ResponseEntity<AddressDto> updateAddress(@PathVariable("addressId") String addressId,
                                                     @RequestBody AddressCommand addressCommand){
         final Address address = addressService.update(addressId, addressCommand);
-
         return ResponseEntity.ok(addressMapper.toAddressDto(address));
     }
     @DeleteMapping("/{addressId}")

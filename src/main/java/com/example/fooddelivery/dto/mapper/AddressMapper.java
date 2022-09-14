@@ -1,4 +1,4 @@
-package com.example.fooddelivery.mapper;
+package com.example.fooddelivery.dto.mapper;
 
 
 import com.example.fooddelivery.dto.AddressDto;
@@ -7,7 +7,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {CustomerMapper.class, OrderMapper.class})
 public interface AddressMapper {
-
     AddressDto toAddressDto(Address address);
-
 }

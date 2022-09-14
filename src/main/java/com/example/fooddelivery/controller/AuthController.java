@@ -2,14 +2,13 @@ package com.example.fooddelivery.controller;
 
 
 import com.example.fooddelivery.dto.CustomerDto;
-import com.example.fooddelivery.mapper.CustomerMapper;
+import com.example.fooddelivery.dto.mapper.CustomerMapper;
 import com.example.fooddelivery.model.Customer;
 import com.example.fooddelivery.payload.*;
 import com.example.fooddelivery.security.UserDetailsServiceImpl;
 import com.example.fooddelivery.service.customer.CustomerService;
 import com.example.fooddelivery.util.TokenHandler;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -23,10 +22,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.apache.commons.lang3.StringUtils;
+
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.fooddelivery.cons.ResourcePath.AUTH;

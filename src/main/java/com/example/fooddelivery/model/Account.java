@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-@Table(name = "ACCOUNTS")
+@Table(name = "accounts")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account extends AbstractEntity{
@@ -17,7 +17,7 @@ public class Account extends AbstractEntity{
     @OneToOne
     private Customer customer;
     @Enumerated(EnumType.STRING)
-    @Column(name = "ACCOUNT_STATUS")
+    @Column(name = "STATUS")
     private AccountStatus status;
 
     @OneToOne
