@@ -57,7 +57,6 @@ public class AccountServiceImpl implements AccountService{
             throw new BusinessException(ExceptionPayloadFactory.EMAIL_ALREADY_EXIST.get());
         }
     }
-
     @Override
     public JwtResponse login(LoginCommand loginCommand) {
         // If the authentication process is successful,

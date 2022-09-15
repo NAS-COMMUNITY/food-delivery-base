@@ -2,11 +2,10 @@ package com.example.fooddelivery.model;
 
 
 
-import com.example.fooddelivery.command.AddressCommand;
+
 import com.example.fooddelivery.command.FoodItemCommand;
 import com.example.fooddelivery.command.OrderEntityCommand;
 import com.example.fooddelivery.enums.Status;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,29 +19,32 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class OrderEntity extends AbstractEntity{
-    @ManyToOne(optional = false)
-    private Address billingAddress;
+public class OrderEntity <B, S extends Address> extends AbstractEntity {
+    @OneToOne(targetEntity = BillingAddress.class, cascade = CascadeType.ALL)
+    private B billingAddress;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    private Address shippingAddress;
+    @OneToOne(targetEntity = ShippingAddress.class, cascade = CascadeType.ALL)
+    private S shippingAddress;
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "orderEntity")
     private Set<FoodItem> foodItems;
 
+    @Column(name = "PRICE")
     private Double price;
 
+    @Column(name = "REJECT_REASON")
     private String rejectReason;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Payment payment;
 
-    public static OrderEntity createOne(final OrderEntityCommand orderEntityCommand,
-                                        final Address billingAddress,
-                                        final Address shippingAddress){
-        final OrderEntity orderEntity = new OrderEntity();
+    public static <B, S extends Address> OrderEntity<B, S> createOne(final OrderEntityCommand orderEntityCommand,
+                                        final B billingAddress,
+                                        final S shippingAddress){
+        final OrderEntity<B, S> orderEntity = new OrderEntity<>();
 
 
         orderEntity.billingAddress = billingAddress;
@@ -64,13 +66,13 @@ public class OrderEntity extends AbstractEntity{
         this.foodItems.remove(foodItem);
         this.price -= foodItem.getPrice();
     }
-    public void linkToShippingAddress(Address address){
+    public void linkToShippingAddress(S address){
         this.shippingAddress = address;
     }
-    public void linkToBillingAddress(Address address){
+    public void linkToBillingAddress(B address){
         this.billingAddress = address;
     }
-    public void update(final Address billingAddress, Address shippingAddress){
+    public void update(final B billingAddress, S shippingAddress){
         this.shippingAddress = shippingAddress;
         this.billingAddress = billingAddress;
     }
