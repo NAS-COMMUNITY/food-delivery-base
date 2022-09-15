@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -44,9 +46,16 @@ public class CategoryServiceImpl implements CategoryService{
     public Category create(CategoryCommand categoryCommand) {
         categoryCommand.validate();
         log.info("begin creating category with payload {}", JSONUtil.toJSON(categoryCommand));
-        final Category category = categoryRepository.save(Category.create(categoryCommand));
-        log.info("Category with id {} created successfully", category.getId());
-        return category;
+
+
+        if(categoryCommand.getFoodItems() != null){
+            final Set<FoodItem> foodItems = Category.createCategory(categoryCommand.getFoodItems());
+            final Category category = categoryRepository.save(Category.create(categoryCommand));
+           category.setFoodItems(foodItems);
+           return category;
+        }
+        log.info("Category with id created successfully");
+        return categoryRepository.save(Category.create(categoryCommand));
     }
 
     @Override

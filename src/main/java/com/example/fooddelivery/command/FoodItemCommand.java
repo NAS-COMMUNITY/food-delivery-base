@@ -16,7 +16,6 @@ import javax.persistence.Column;
 public class FoodItemCommand implements Validate {
     private final String name;
     private final Double price;
-    private final FoodOrCategoryStatus status;
     private final Integer quantity;
 
     @Override

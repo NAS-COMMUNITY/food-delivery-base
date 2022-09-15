@@ -3,15 +3,14 @@ package com.example.fooddelivery.controller;
 
 
 import com.example.fooddelivery.command.*;
-import com.example.fooddelivery.dto.AddressDto;
+import com.example.fooddelivery.dto.BillingAddressDTO;
 import com.example.fooddelivery.dto.FoodItemDto;
 import com.example.fooddelivery.dto.OrderDto;
+import com.example.fooddelivery.dto.ShippingAddressDTO;
 import com.example.fooddelivery.dto.mapper.AddressMapper;
 import com.example.fooddelivery.dto.mapper.FoodItemMapper;
 import com.example.fooddelivery.dto.mapper.OrderMapper;
-import com.example.fooddelivery.model.Address;
-import com.example.fooddelivery.model.FoodItem;
-import com.example.fooddelivery.model.OrderEntity;
+import com.example.fooddelivery.model.*;
 import com.example.fooddelivery.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,15 +26,14 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 @RestController
 @RequestMapping(V1 + ORDERS)
 @RequiredArgsConstructor
-public class OrderController {
+public class OrderController <T extends Address>{
 
-    private final OrderService orderService;
-    private final AddressMapper addressMapper;
+    private final OrderService<T> orderService;
     private final OrderMapper orderMapper;
     private final FoodItemMapper foodItemMapper;
 
     @GetMapping
-    public ResponseEntity<Page<OrderDto>> getAll(Pageable pageable){
+    public ResponseEntity<Page<OrderDto<BillingAddressDTO, ShippingAddressDTO>>> getAll(Pageable pageable){
         return ResponseEntity.ok(orderService.getAll(pageable));
     }
     @GetMapping("/{orderId}")
@@ -45,18 +43,18 @@ public class OrderController {
         return ResponseEntity.ok(orderMapper.toOrderDto(order));
     }
     @PostMapping("/{orderId}/billingAddress")
-    public ResponseEntity<AddressDto> addBillingAddressToOrder(@PathVariable("orderId") final String orderId,
-                                                               @RequestBody final AddressCommand addressCommand){
-        final Address address = orderService.addBillingAddressToOrder(orderId, addressCommand);
+    public <S extends AddressCommand> ResponseEntity<T> addBillingAddressToOrder(@PathVariable("orderId") final String orderId,
+                                                               @RequestBody final S addressCommand, Class<T> aClass){
+        final T address = orderService.createAddress(orderId, addressCommand, aClass);
         final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(address.getId()).toUri();
-        return ResponseEntity.created(uri).body(addressMapper.toAddressDto(address));
+        return ResponseEntity.created(uri).body(address);
     }
     @PostMapping("/{orderId}/shippingAddress")
-    public ResponseEntity<AddressDto> addShippingAddressToOrder(@PathVariable("orderId") String orderId,
-                                                                @RequestBody final AddressCommand addressCommand){
-        final Address address = orderService.addShippingAddressToOrder(orderId, addressCommand);
+    public <S extends AddressCommand> ResponseEntity<T> addShippingAddressToOrder(@PathVariable("orderId") String orderId,
+                                                                @RequestBody final AddressCommand addressCommand, Class<T> aClass){
+        final T address = orderService.createAddress(orderId, addressCommand, aClass);
         final URI uri = fromCurrentRequest().path("/{id}").buildAndExpand(address.getId()).toUri();
-        return ResponseEntity.created(uri).body(addressMapper.toAddressDto(address));
+        return ResponseEntity.created(uri).body(address);
     }
 
     @PostMapping("/orders")

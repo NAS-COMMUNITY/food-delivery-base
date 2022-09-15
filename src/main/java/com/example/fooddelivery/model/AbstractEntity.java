@@ -29,6 +29,7 @@ public class AbstractEntity {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private String id;
+
     @CreatedDate
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -42,5 +43,4 @@ public class AbstractEntity {
     protected void delete() {
         this.deleted = true;
     }
-
 }

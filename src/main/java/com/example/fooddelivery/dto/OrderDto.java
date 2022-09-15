@@ -10,13 +10,13 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class OrderDto {
+public class OrderDto<B, S> {
     private String id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private CustomerDto customer;
-    private AddressDto billingAddress;
-    private AddressDto shippingAddress;
+    private B billingAddress;
+    private S shippingAddress;
     private Set<FoodItemDto> products;
     private Status status;
     private Double price;

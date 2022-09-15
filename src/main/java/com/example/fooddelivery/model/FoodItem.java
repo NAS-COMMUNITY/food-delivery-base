@@ -45,7 +45,6 @@ public class FoodItem extends AbstractEntity{
     public void update(final FoodItemCommand foodItemCommand){
         this.name = foodItemCommand.getName();
         this.price = foodItemCommand.getPrice();
-        this.status = foodItemCommand.getStatus();
         this.quantity = foodItemCommand.getQuantity();
     }
     @Override

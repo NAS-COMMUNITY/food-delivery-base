@@ -32,7 +32,7 @@ public class Address extends AbstractEntity{
         this.country = country;
     }
 
-    public static Address create(final AddressCommand addressCommand){
+    public static <S extends AddressCommand>  Address create(final S addressCommand){
         final Address address = new Address();
         address.street = addressCommand.getStreet();
         address.city = addressCommand.getCity();
